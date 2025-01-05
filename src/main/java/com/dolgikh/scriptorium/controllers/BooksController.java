@@ -1,60 +1,59 @@
 package com.dolgikh.scriptorium.controllers;
 
+import com.dolgikh.scriptorium.dto.BookDTO;
 import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.services.BooksService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
 @RequestMapping("/books")
 public class BooksController {
     private final BooksService booksService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public BooksController(BooksService booksService) {
+    public BooksController(BooksService booksService, ModelMapper modelMapper) {
         this.booksService = booksService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
-        return "books/index";
+    public List<BookDTO> index() {
+        return booksService.findAll()
+                .stream()
+                .map(book -> modelMapper.map(book, BookDTO.class))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("book", booksService.findOne(id));
-        return "books/show";
-    }
-
-    @GetMapping("/new")
-    public String newBook(@ModelAttribute("book") Book book) {
-        return "books/new";
+    public BookDTO show(@PathVariable("id") int id) {
+        return modelMapper.map(booksService.findOne(id), BookDTO.class);
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("book") Book book) {
-        booksService.save(book);
-        return "redirect:/books";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("book", booksService.findOne(id));
-        return "books/edit";
+    public ResponseEntity<HttpStatus> create(@RequestBody BookDTO bookDTO) {
+        booksService.save(modelMapper.map(bookDTO, Book.class));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("book") Book book) {
+    public ResponseEntity<HttpStatus> update(@RequestBody BookDTO bookDTO, @PathVariable Integer id) {
+        Book book = modelMapper.map(bookDTO, Book.class);
+        book.setId(id);
         booksService.save(book);
-        return "redirect:/books";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
         booksService.delete(id);
-        return "redirect:/books";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
