@@ -54,7 +54,7 @@ public class AuthorsController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody AuthorDTO authorDTO, @PathVariable Integer id) {
-        Author author =modelMapper.map(authorDTO, Author.class);
+        Author author = modelMapper.map(authorDTO, Author.class);
         author.setId(id);
         authorsService.save(author);
         return new ResponseEntity<>(HttpStatus.OK);
