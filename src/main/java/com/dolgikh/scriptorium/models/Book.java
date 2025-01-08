@@ -2,6 +2,7 @@ package com.dolgikh.scriptorium.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -61,11 +62,23 @@ public class Book {
         this.authors = authors;
     }
 
+    public void addAuthor(Author author) {
+        if (authors == null)
+            authors = new ArrayList<>();
+        authors.add(author);
+    }
+
     public List<Genre> getGenres() {
         return genres;
     }
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
+    }
+
+    public void addGenre(Genre genre) {
+        if (genres == null)
+            genres = new ArrayList<>();
+        genres.add(genre);
     }
 }

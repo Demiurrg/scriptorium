@@ -1,7 +1,7 @@
 package com.dolgikh.scriptorium.controllers;
 
 import com.dolgikh.scriptorium.dto.AuthorDTO;
-import com.dolgikh.scriptorium.dto.BookDTO;
+import com.dolgikh.scriptorium.dto.BookRequestDTO;
 import com.dolgikh.scriptorium.models.Author;
 import com.dolgikh.scriptorium.services.AuthorsService;
 import org.modelmapper.ModelMapper;
@@ -39,10 +39,10 @@ public class AuthorsController {
     }
 
     @GetMapping("/{id}/books")
-    public List<BookDTO> getBooksOfAuthor(@PathVariable Integer id) {
+    public List<BookRequestDTO> getBooksOfAuthor(@PathVariable Integer id) {
         return authorsService.findOne(id).getBooks()
                 .stream()
-                .map(book -> modelMapper.map(book, BookDTO.class))
+                .map(book -> modelMapper.map(book, BookRequestDTO.class))
                 .collect(Collectors.toList());
     }
 

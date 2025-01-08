@@ -1,6 +1,6 @@
 package com.dolgikh.scriptorium.controllers;
 
-import com.dolgikh.scriptorium.dto.BookDTO;
+import com.dolgikh.scriptorium.dto.BookRequestDTO;
 import com.dolgikh.scriptorium.dto.GenreDTO;
 import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.services.GenresService;
@@ -39,11 +39,11 @@ public class GenresController {
     }
 
     @GetMapping("/{id}/books")
-    public List<BookDTO> getBooksOfGenre(@PathVariable Integer id) {
+    public List<BookRequestDTO> getBooksOfGenre(@PathVariable Integer id) {
         Genre genre = genresService.findOne(id);
         return genre.getBooks()
                 .stream()
-                .map(book -> modelMapper.map(book, BookDTO.class))
+                .map(book -> modelMapper.map(book, BookRequestDTO.class))
                 .collect(Collectors.toList());
     }
 

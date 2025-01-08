@@ -2,14 +2,14 @@ package com.dolgikh.scriptorium.dto;
 
 import java.util.List;
 
-public class BookDTO {
+public class BookResponseDTO {
     private String title;
     private List<AuthorDTO> authors;
     private List<GenreDTO> genres;
 
-    BookDTO() {}
+    public BookResponseDTO() {}
 
-    public BookDTO(String title, List<AuthorDTO> authors, List<GenreDTO> genres) {
+    public BookResponseDTO(String title, List<AuthorDTO> authors, List<GenreDTO> genres) {
         this.title = title;
         this.authors = authors;
         this.genres = genres;
