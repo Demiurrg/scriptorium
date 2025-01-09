@@ -3,7 +3,6 @@ package com.dolgikh.scriptorium.util;
 import com.dolgikh.scriptorium.dto.BookRequestDTO;
 import com.dolgikh.scriptorium.repositories.AuthorsRepository;
 import com.dolgikh.scriptorium.repositories.GenresRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -17,7 +16,7 @@ public class BookDTOValidator implements Validator {
     private final GenresRepository genresRepository;
 
     @Autowired
-    public BookDTOValidator(AuthorsRepository authorsRepository, GenresRepository genresRepository, ModelMapper modelMapper) {
+    public BookDTOValidator(AuthorsRepository authorsRepository, GenresRepository genresRepository) {
         this.authorsRepository = authorsRepository;
         this.genresRepository = genresRepository;
     }
@@ -35,12 +34,12 @@ public class BookDTOValidator implements Validator {
 
         for (int authorId : authorIds) {
             if (authorsRepository.findById(authorId).isEmpty())
-                errors.rejectValue("authors", "", "Author with ID " + authorId + " does not exist");
+                errors.rejectValue("authorIds", "", "Author with ID " + authorId + " does not exist");
         }
 
         for (int genreId : genreIds) {
             if (genresRepository.findById(genreId).isEmpty())
-                errors.rejectValue("genres", "", "Genre with ID " + genreId + " does not exist");
+                errors.rejectValue("genreIds", "", "Genre with ID " + genreId + " does not exist");
         }
     }
 }

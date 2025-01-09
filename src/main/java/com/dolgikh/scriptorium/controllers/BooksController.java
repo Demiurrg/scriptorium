@@ -6,12 +6,14 @@ import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.services.BooksService;
 import com.dolgikh.scriptorium.util.BookDTOValidator;
 import com.dolgikh.scriptorium.util.BookModelMapper;
+import com.dolgikh.scriptorium.util.ErrorResponse;
+import com.dolgikh.scriptorium.util.exceptions.BookNotSavedException;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class BooksController {
     private final BookDTOValidator bookDTOValidator;
 
     @Autowired
-    public BooksController(BooksService booksService, ModelMapper modelMapper, BookModelMapper bookModelMapper, BookDTOValidator bookDTOValidator) {
+    public BooksController(BooksService booksService, BookModelMapper bookModelMapper, BookDTOValidator bookDTOValidator) {
         this.booksService = booksService;
         this.bookModelMapper = bookModelMapper;
         this.bookDTOValidator = bookDTOValidator;
@@ -45,23 +47,29 @@ public class BooksController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult) throws BookNotSavedException {
         bookDTOValidator.validate(bookRequestDTO, bindingResult);
 
         if (bindingResult.hasErrors())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new BookNotSavedException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
         Book book = bookModelMapper.DTOtoBook(bookRequestDTO);
-
         booksService.save(book);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody BookRequestDTO bookRequestDTO, @PathVariable Integer id) {
+    public ResponseEntity<HttpStatus> update(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult, @PathVariable Integer id) throws BookNotSavedException {
+        bookDTOValidator.validate(bookRequestDTO, bindingResult);
+
+        if (bindingResult.hasErrors())
+            throw new BookNotSavedException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
+
         Book book = bookModelMapper.DTOtoBook(bookRequestDTO);
         book.setId(id);
         booksService.save(book);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -69,5 +77,14 @@ public class BooksController {
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
         booksService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException(BookNotSavedException exception) {
+        return new ResponseEntity<>(
+                new ErrorResponse(
+                        exception.getMessage(),
+                        System.currentTimeMillis()),
+                HttpStatus.BAD_REQUEST);
     }
 }
