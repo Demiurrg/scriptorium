@@ -1,6 +1,9 @@
 package com.dolgikh.scriptorium.dto;
 
+import jakarta.validation.constraints.Size;
+
 public class GenreDTO {
+    @Size(min = 2, max = 100)
     private String name;
 
     public GenreDTO() {}

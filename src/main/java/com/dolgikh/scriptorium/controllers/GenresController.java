@@ -4,10 +4,15 @@ import com.dolgikh.scriptorium.dto.BookRequestDTO;
 import com.dolgikh.scriptorium.dto.GenreDTO;
 import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.services.GenresService;
+import com.dolgikh.scriptorium.util.ErrorResponse;
+import com.dolgikh.scriptorium.util.exceptions.GenreNotSavedException;
+import com.dolgikh.scriptorium.util.validators.GenreDTOValidator;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +23,13 @@ import java.util.stream.Collectors;
 public class GenresController {
     private final GenresService genresService;
     private final ModelMapper modelMapper;
+    private final GenreDTOValidator genreDTOValidator;
 
     @Autowired
-    public GenresController(GenresService genresService, ModelMapper modelMapper) {
+    public GenresController(GenresService genresService, ModelMapper modelMapper, GenreDTOValidator genreDTOValidator) {
         this.genresService = genresService;
         this.modelMapper = modelMapper;
+        this.genreDTOValidator = genreDTOValidator;
     }
 
     @GetMapping()
@@ -48,13 +55,23 @@ public class GenresController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> save(@RequestBody GenreDTO genreDTO) {
+    public ResponseEntity<HttpStatus> save(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult) throws GenreNotSavedException {
+        genreDTOValidator.validate(genreDTO, bindingResult);
+
+        if (bindingResult.hasErrors())
+            throw new GenreNotSavedException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
+
         genresService.save(modelMapper.map(genreDTO, Genre.class));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody GenreDTO genreDTO, @PathVariable Integer id) {
+    public ResponseEntity<HttpStatus> update(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult, @PathVariable Integer id) throws GenreNotSavedException {
+        genreDTOValidator.validate(genreDTO, bindingResult);
+
+        if (bindingResult.hasErrors())
+            throw new GenreNotSavedException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
+
         Genre genre = modelMapper.map(genreDTO, Genre.class);
         genre.setId(id);
         genresService.save(genre);
@@ -65,5 +82,14 @@ public class GenresController {
     public ResponseEntity<HttpStatus> delete(@PathVariable Integer id) {
         genresService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException(GenreNotSavedException exception) {
+        return new ResponseEntity<>(
+                new ErrorResponse(
+                        exception.getMessage(),
+                        System.currentTimeMillis()),
+                HttpStatus.BAD_REQUEST);
     }
 }
