@@ -1,4 +1,4 @@
-package com.dolgikh.scriptorium.util;
+package com.dolgikh.scriptorium.util.validators;
 
 import com.dolgikh.scriptorium.dto.BookRequestDTO;
 import com.dolgikh.scriptorium.repositories.AuthorsRepository;

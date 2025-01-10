@@ -55,7 +55,7 @@ public class GenresController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> save(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult) throws GenreNotSavedException {
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult) throws GenreNotSavedException {
         genreDTOValidator.validate(genreDTO, bindingResult);
 
         if (bindingResult.hasErrors())

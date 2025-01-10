@@ -1,10 +1,12 @@
 package com.dolgikh.scriptorium.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
 public class AuthorDTO {
+    @Size(min = 2, max = 200)
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private Date dateOfBirth;
@@ -41,5 +43,9 @@ public class AuthorDTO {
 
     public void setDateOfDeath(Date dateOfDeath) {
         this.dateOfDeath = dateOfDeath;
+    }
+
+    public boolean isAlive() {
+        return dateOfDeath == null;
     }
 }
