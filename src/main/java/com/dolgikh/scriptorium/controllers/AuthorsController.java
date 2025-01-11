@@ -5,7 +5,6 @@ import com.dolgikh.scriptorium.dto.BookRequestDTO;
 import com.dolgikh.scriptorium.models.Author;
 import com.dolgikh.scriptorium.services.AuthorsService;
 import com.dolgikh.scriptorium.util.ErrorResponse;
-import com.dolgikh.scriptorium.util.exceptions.AuthorNotSavedException;
 import com.dolgikh.scriptorium.util.validators.AuthorDTOValidator;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -54,26 +53,24 @@ public class AuthorsController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult) throws AuthorNotSavedException {
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult) {
         authorDTOValidator.validate(authorDTO, bindingResult);
 
         if (bindingResult.hasErrors())
-            throw new AuthorNotSavedException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
+            throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
         authorsService.save(modelMapper.map(authorDTO, Author.class));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult, @PathVariable Integer id) throws AuthorNotSavedException {
+    public ResponseEntity<HttpStatus> update(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult, @PathVariable Integer id) {
         authorDTOValidator.validate(authorDTO, bindingResult);
 
         if (bindingResult.hasErrors())
-            throw new AuthorNotSavedException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
+            throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        Author author = modelMapper.map(authorDTO, Author.class);
-        author.setId(id);
-        authorsService.save(author);
+        authorsService.update(modelMapper.map(authorDTO, Author.class), id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -81,14 +78,5 @@ public class AuthorsController {
     public ResponseEntity<HttpStatus> delete(@PathVariable Integer id) {
         authorsService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(AuthorNotSavedException exception) {
-        return new ResponseEntity<>(
-                new ErrorResponse(
-                        exception.getMessage(),
-                        System.currentTimeMillis()),
-                HttpStatus.BAD_REQUEST);
     }
 }
