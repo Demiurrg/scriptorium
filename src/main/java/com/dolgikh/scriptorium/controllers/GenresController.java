@@ -1,9 +1,10 @@
 package com.dolgikh.scriptorium.controllers;
 
-import com.dolgikh.scriptorium.dto.BookRequestDTO;
+import com.dolgikh.scriptorium.dto.BookResponseDTO;
 import com.dolgikh.scriptorium.dto.GenreDTO;
 import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.services.GenresService;
+import com.dolgikh.scriptorium.util.BookModelMapper;
 import com.dolgikh.scriptorium.util.ErrorResponse;
 import com.dolgikh.scriptorium.util.validators.GenreDTOValidator;
 import jakarta.validation.Valid;
@@ -22,12 +23,14 @@ import java.util.stream.Collectors;
 public class GenresController {
     private final GenresService genresService;
     private final ModelMapper modelMapper;
+    private final BookModelMapper bookModelMapper;
     private final GenreDTOValidator genreDTOValidator;
 
     @Autowired
-    public GenresController(GenresService genresService, ModelMapper modelMapper, GenreDTOValidator genreDTOValidator) {
+    public GenresController(GenresService genresService, ModelMapper modelMapper, BookModelMapper bookModelMapper, GenreDTOValidator genreDTOValidator) {
         this.genresService = genresService;
         this.modelMapper = modelMapper;
+        this.bookModelMapper = bookModelMapper;
         this.genreDTOValidator = genreDTOValidator;
     }
 
@@ -45,12 +48,8 @@ public class GenresController {
     }
 
     @GetMapping("/{id}/books")
-    public List<BookRequestDTO> getBooksOfGenre(@PathVariable Integer id) {
-        Genre genre = genresService.findOne(id);
-        return genre.getBooks()
-                .stream()
-                .map(book -> modelMapper.map(book, BookRequestDTO.class))
-                .collect(Collectors.toList());
+    public List<BookResponseDTO> getBooksOfGenre(@PathVariable Integer id) {
+        return bookModelMapper.allBooksToDTO(genresService.findBooksOfGenre(id));
     }
 
     @PostMapping()

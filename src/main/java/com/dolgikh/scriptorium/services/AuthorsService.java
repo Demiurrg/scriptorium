@@ -1,6 +1,7 @@
 package com.dolgikh.scriptorium.services;
 
 import com.dolgikh.scriptorium.models.Author;
+import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.repositories.AuthorsRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,10 @@ public class AuthorsService {
             throw new EntityNotFoundException(notFoundMessage(id));
 
         return author.get();
+    }
+
+    public List<Book> findBooksOfAuthor(int id) {
+        return findOne(id).getBooks();
     }
 
     @Transactional

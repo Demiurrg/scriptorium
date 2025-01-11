@@ -1,5 +1,6 @@
 package com.dolgikh.scriptorium.services;
 
+import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.repositories.GenresRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,6 +36,10 @@ public class GenresService {
             throw new EntityNotFoundException(notFoundMessage(id));
 
         return genre.get();
+    }
+
+    public List<Book> findBooksOfGenre(int id) {
+        return findOne(id).getBooks();
     }
 
     @Transactional

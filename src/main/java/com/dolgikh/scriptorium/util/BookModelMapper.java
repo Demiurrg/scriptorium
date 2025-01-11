@@ -11,6 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class BookModelMapper {
     private final AuthorsRepository authorsRepository;
@@ -42,5 +45,11 @@ public class BookModelMapper {
 
     public BookResponseDTO bookToDTO(Book book) {
         return modelMapper.map(book, BookResponseDTO.class);
+    }
+
+    public List<BookResponseDTO> allBooksToDTO(List<Book> books) {
+        return books.stream()
+                .map(this::bookToDTO)
+                .collect(Collectors.toList());
     }
 }

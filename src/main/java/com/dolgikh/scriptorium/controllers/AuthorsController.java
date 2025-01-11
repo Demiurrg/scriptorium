@@ -1,9 +1,10 @@
 package com.dolgikh.scriptorium.controllers;
 
 import com.dolgikh.scriptorium.dto.AuthorDTO;
-import com.dolgikh.scriptorium.dto.BookRequestDTO;
+import com.dolgikh.scriptorium.dto.BookResponseDTO;
 import com.dolgikh.scriptorium.models.Author;
 import com.dolgikh.scriptorium.services.AuthorsService;
+import com.dolgikh.scriptorium.util.BookModelMapper;
 import com.dolgikh.scriptorium.util.ErrorResponse;
 import com.dolgikh.scriptorium.util.validators.AuthorDTOValidator;
 import jakarta.validation.Valid;
@@ -22,12 +23,14 @@ import java.util.stream.Collectors;
 public class AuthorsController {
     private final AuthorsService authorsService;
     private final ModelMapper modelMapper;
+    private final BookModelMapper bookModelMapper;
     private final AuthorDTOValidator authorDTOValidator;
 
     @Autowired
-    public AuthorsController(AuthorsService authorsService, ModelMapper modelMapper, AuthorDTOValidator authorDTOValidator) {
+    public AuthorsController(AuthorsService authorsService, ModelMapper modelMapper, BookModelMapper bookModelMapper, AuthorDTOValidator authorDTOValidator) {
         this.authorsService = authorsService;
         this.modelMapper = modelMapper;
+        this.bookModelMapper = bookModelMapper;
         this.authorDTOValidator = authorDTOValidator;
     }
 
@@ -45,11 +48,8 @@ public class AuthorsController {
     }
 
     @GetMapping("/{id}/books")
-    public List<BookRequestDTO> getBooksOfAuthor(@PathVariable Integer id) {
-        return authorsService.findOne(id).getBooks()
-                .stream()
-                .map(book -> modelMapper.map(book, BookRequestDTO.class))
-                .collect(Collectors.toList());
+    public List<BookResponseDTO> getBooksOfAuthor(@PathVariable Integer id) {
+        return bookModelMapper.allBooksToDTO(authorsService.findBooksOfAuthor(id));
     }
 
     @PostMapping()
