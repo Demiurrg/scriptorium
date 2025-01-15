@@ -1,6 +1,6 @@
 package com.dolgikh.scriptorium.controllers;
 
-import com.dolgikh.scriptorium.dto.BookResponseDTO;
+import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
 import com.dolgikh.scriptorium.dto.GenreDTO;
 import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.services.GenresService;

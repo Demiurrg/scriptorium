@@ -1,6 +1,6 @@
 package com.dolgikh.scriptorium.util.validators;
 
-import com.dolgikh.scriptorium.dto.BookRequestDTO;
+import com.dolgikh.scriptorium.dto.books.BookRequestDTO;
 import com.dolgikh.scriptorium.repositories.AuthorsRepository;
 import com.dolgikh.scriptorium.repositories.GenresRepository;
 import org.springframework.beans.factory.annotation.Autowired;

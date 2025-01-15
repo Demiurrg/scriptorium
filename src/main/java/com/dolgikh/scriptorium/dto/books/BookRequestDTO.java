@@ -1,4 +1,4 @@
-package com.dolgikh.scriptorium.dto;
+package com.dolgikh.scriptorium.dto.books;
 
 import jakarta.validation.constraints.Size;
 

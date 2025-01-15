@@ -1,7 +1,7 @@
 package com.dolgikh.scriptorium.util;
 
-import com.dolgikh.scriptorium.dto.BookRequestDTO;
-import com.dolgikh.scriptorium.dto.BookResponseDTO;
+import com.dolgikh.scriptorium.dto.books.BookRequestDTO;
+import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
 import com.dolgikh.scriptorium.models.Author;
 import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.models.Genre;

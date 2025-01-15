@@ -1,7 +1,7 @@
 package com.dolgikh.scriptorium.controllers;
 
-import com.dolgikh.scriptorium.dto.BookRequestDTO;
-import com.dolgikh.scriptorium.dto.BookResponseDTO;
+import com.dolgikh.scriptorium.dto.books.BookRequestDTO;
+import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
 import com.dolgikh.scriptorium.services.BooksService;
 import com.dolgikh.scriptorium.util.validators.BookDTOValidator;
 import com.dolgikh.scriptorium.util.BookModelMapper;

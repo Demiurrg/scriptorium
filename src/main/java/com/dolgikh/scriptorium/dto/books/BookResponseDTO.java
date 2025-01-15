@@ -1,4 +1,7 @@
-package com.dolgikh.scriptorium.dto;
+package com.dolgikh.scriptorium.dto.books;
+
+import com.dolgikh.scriptorium.dto.AuthorDTO;
+import com.dolgikh.scriptorium.dto.GenreDTO;
 
 import java.util.List;
 
