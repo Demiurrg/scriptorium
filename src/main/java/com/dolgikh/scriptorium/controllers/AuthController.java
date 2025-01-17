@@ -1,6 +1,6 @@
 package com.dolgikh.scriptorium.controllers;
 
-import com.dolgikh.scriptorium.dto.UserAccountDTO;
+import com.dolgikh.scriptorium.dto.user.UserAccountRequestDTO;
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.security.JWTUtil;
 import com.dolgikh.scriptorium.services.UserAccountService;
@@ -33,11 +33,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> performLogin(@RequestBody UserAccountDTO userAccountDTO) {
+    public Map<String, String> performLogin(@RequestBody UserAccountRequestDTO userAccountRequestDTO) {
         UsernamePasswordAuthenticationToken authInputToken =
                 new UsernamePasswordAuthenticationToken(
-                        userAccountDTO.getUsername(),
-                        userAccountDTO.getPassword()
+                        userAccountRequestDTO.getUsername(),
+                        userAccountRequestDTO.getPassword()
                 );
         try {
             authenticationManager.authenticate(authInputToken);
@@ -45,12 +45,12 @@ public class AuthController {
             return Map.of("message", "Incorrect credentials!");
         }
 
-        return Map.of("jwt-token", jwtUtil.generateToken(userAccountDTO.getUsername()));
+        return Map.of("jwt-token", jwtUtil.generateToken(userAccountRequestDTO.getUsername()));
     }
 
     @PostMapping("/registration")
-    public Map<String, String> performRegistration(@RequestBody UserAccountDTO userAccountDTO) {
-        UserAccount userAccount = modelMapper.map(userAccountDTO, UserAccount.class);
+    public Map<String, String> performRegistration(@RequestBody UserAccountRequestDTO userAccountRequestDTO) {
+        UserAccount userAccount = modelMapper.map(userAccountRequestDTO, UserAccount.class);
         userAccountService.save(userAccount);
         return Map.of("jwt-token", jwtUtil.generateToken(userAccount.getUsername()));
     }

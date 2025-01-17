@@ -5,7 +5,7 @@ import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
 import com.dolgikh.scriptorium.services.BooksService;
 import com.dolgikh.scriptorium.util.validators.BookDTOValidator;
 import com.dolgikh.scriptorium.util.BookModelMapper;
-import com.dolgikh.scriptorium.util.ErrorResponse;
+import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

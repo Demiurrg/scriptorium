@@ -5,7 +5,7 @@ import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
 import com.dolgikh.scriptorium.models.Author;
 import com.dolgikh.scriptorium.services.AuthorsService;
 import com.dolgikh.scriptorium.util.BookModelMapper;
-import com.dolgikh.scriptorium.util.ErrorResponse;
+import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import com.dolgikh.scriptorium.util.validators.AuthorDTOValidator;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;

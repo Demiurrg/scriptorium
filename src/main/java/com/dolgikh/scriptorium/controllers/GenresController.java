@@ -5,7 +5,7 @@ import com.dolgikh.scriptorium.dto.GenreDTO;
 import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.services.GenresService;
 import com.dolgikh.scriptorium.util.BookModelMapper;
-import com.dolgikh.scriptorium.util.ErrorResponse;
+import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import com.dolgikh.scriptorium.util.validators.GenreDTOValidator;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
