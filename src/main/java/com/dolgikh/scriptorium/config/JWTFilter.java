@@ -17,24 +17,38 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserAccountDetailsService userAccountDetailsService;
     private final ObjectMapper objectMapper;
+    private final List<String> exceptionURLs;
 
     @Autowired
     public JWTFilter(JWTUtil jwtUtil, UserAccountDetailsService userAccountDetailsService, ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
         this.userAccountDetailsService = userAccountDetailsService;
         this.objectMapper = objectMapper;
+        this.exceptionURLs = new ArrayList<>();
+    }
+
+    public void setExceptionURLs(String ... exceptionURLs) {
+        Collections.addAll(this.exceptionURLs, exceptionURLs);
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return !path.startsWith("/users");
+
+        for (String exceptionURL : exceptionURLs)
+            if (path.startsWith(exceptionURL))
+                return true;
+
+        return false;
     }
 
     @Override

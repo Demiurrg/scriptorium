@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-
+        jwtFilter.setExceptionURLs("/users");
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
