@@ -26,29 +26,29 @@ public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserAccountDetailsService userAccountDetailsService;
     private final ObjectMapper objectMapper;
-    private final List<String> exceptionURLs;
+    private final List<String> URLs;
 
     @Autowired
     public JWTFilter(JWTUtil jwtUtil, UserAccountDetailsService userAccountDetailsService, ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
         this.userAccountDetailsService = userAccountDetailsService;
         this.objectMapper = objectMapper;
-        this.exceptionURLs = new ArrayList<>();
+        this.URLs = new ArrayList<>();
     }
 
-    public void setExceptionURLs(String ... exceptionURLs) {
-        Collections.addAll(this.exceptionURLs, exceptionURLs);
+    public void setURLs(String ... URLs) {
+        Collections.addAll(this.URLs, URLs);
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
 
-        for (String exceptionURL : exceptionURLs)
+        for (String exceptionURL : URLs)
             if (path.startsWith(exceptionURL))
-                return true;
+                return false;
 
-        return false;
+        return true;
     }
 
     @Override
