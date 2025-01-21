@@ -34,8 +34,13 @@ public class UserAccountController {
         return modelMapper.map(getCurrentUser(), UserAccountResponseDTO.class);
     }
 
-    @PostMapping("/addBookToRead")
+    @PostMapping("/readBooks")
     public void addBookToRead(@RequestBody BookIdDTO bookIdDTO) {
         userAccountService.addBookToRead(getCurrentUser(), bookIdDTO.getId());
+    }
+
+    @DeleteMapping("/readBooks")
+    public void deleteBookFromRead(@RequestBody BookIdDTO bookIdDTO) {
+        userAccountService.deleteBookFromRead(getCurrentUser().getId(), bookIdDTO.getId());
     }
 }

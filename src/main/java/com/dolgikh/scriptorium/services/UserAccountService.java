@@ -45,4 +45,9 @@ public class UserAccountService {
 
         userReadingHistoryRepository.save(new UserReadingHistory(userAccount, book, new Date()));
     }
+
+    @Transactional
+    public void deleteBookFromRead(int userId, int bookId) {
+        userReadingHistoryRepository.deleteByUserIdAndBookId(userId, bookId);
+    }
 }

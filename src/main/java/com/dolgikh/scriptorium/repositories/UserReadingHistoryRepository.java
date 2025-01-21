@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserReadingHistoryRepository extends JpaRepository<UserReadingHistory, Integer> {
+    void deleteByUserIdAndBookId(int userId, int bookId);
 }
