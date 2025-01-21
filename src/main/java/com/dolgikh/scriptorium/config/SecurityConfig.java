@@ -32,14 +32,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/registration").permitAll()
-                        .requestMatchers("/users").authenticated()
+                        .requestMatchers("/user").authenticated()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-        jwtFilter.setExceptionURLs("/users");
+        jwtFilter.setExceptionURLs("/user");
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

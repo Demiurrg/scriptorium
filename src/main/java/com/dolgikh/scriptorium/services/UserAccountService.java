@@ -1,5 +1,6 @@
 package com.dolgikh.scriptorium.services;
 
+import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,9 @@ public class UserAccountService {
     public void save(UserAccount userAccount) {
         userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
         userAccountRepository.save(userAccount);
+    }
+
+    public void addBookToRead(UserAccount userAccount, Book book) {
+
     }
 }

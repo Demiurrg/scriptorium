@@ -13,10 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserAccountController {
     private final UserAccountService userAccountService;
     private final ModelMapper modelMapper;
+
+    private UserAccount getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserAccountDetails userAccountDetails = (UserAccountDetails) authentication.getPrincipal();
+        return userAccountService.show(userAccountDetails.getUsername());
+    }
 
     @Autowired
     public UserAccountController(UserAccountService userAccountService, ModelMapper modelMapper) {
@@ -26,11 +32,6 @@ public class UserAccountController {
 
     @GetMapping()
     public UserAccountResponseDTO showCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserAccountDetails userAccountDetails = (UserAccountDetails) authentication.getPrincipal();
-
-        UserAccount userAccount = userAccountService.show(userAccountDetails.getUsername());
-
-        return modelMapper.map(userAccount, UserAccountResponseDTO.class);
+        return modelMapper.map(getCurrentUser(), UserAccountResponseDTO.class);
     }
 }
