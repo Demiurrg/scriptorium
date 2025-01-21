@@ -2,6 +2,10 @@ package com.dolgikh.scriptorium.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name="user_account")
 public class UserAccount {
@@ -15,6 +19,9 @@ public class UserAccount {
 
     @Column(name="password")
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserReadingHistory> readingHistoryList;
 
     public UserAccount() {}
 
@@ -45,5 +52,20 @@ public class UserAccount {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<UserReadingHistory> getReadingHistoryList() {
+        return readingHistoryList;
+    }
+
+    public void setReadingHistoryList(List<UserReadingHistory> readingHistoryList) {
+        this.readingHistoryList = readingHistoryList;
+    }
+
+    public void readBook(Book book) {
+        if (readingHistoryList == null)
+            readingHistoryList = new ArrayList<>();
+
+        readingHistoryList.add(new UserReadingHistory(this, book, new Date()));
     }
 }

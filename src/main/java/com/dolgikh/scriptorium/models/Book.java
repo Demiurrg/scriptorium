@@ -32,6 +32,9 @@ public class Book {
     )
     private List<Genre> genres;
 
+    @OneToMany(mappedBy = "book")
+    private List<UserReadingHistory> readingHistoryList;
+
     public Book() {}
 
     public Book(String title) {
@@ -80,5 +83,13 @@ public class Book {
         if (genres == null)
             genres = new ArrayList<>();
         genres.add(genre);
+    }
+
+    public List<UserReadingHistory> getReadingHistoryList() {
+        return readingHistoryList;
+    }
+
+    public void setReadingHistoryList(List<UserReadingHistory> readingHistoryList) {
+        this.readingHistoryList = readingHistoryList;
     }
 }
