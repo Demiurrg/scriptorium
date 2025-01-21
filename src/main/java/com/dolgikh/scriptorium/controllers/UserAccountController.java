@@ -1,5 +1,6 @@
 package com.dolgikh.scriptorium.controllers;
 
+import com.dolgikh.scriptorium.dto.books.BookIdDTO;
 import com.dolgikh.scriptorium.dto.user.UserAccountResponseDTO;
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.security.UserAccountDetails;
@@ -8,9 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -33,5 +32,10 @@ public class UserAccountController {
     @GetMapping()
     public UserAccountResponseDTO showCurrentUser() {
         return modelMapper.map(getCurrentUser(), UserAccountResponseDTO.class);
+    }
+
+    @PostMapping("/addBookToRead")
+    public void addBookToRead(@RequestBody BookIdDTO bookIdDTO) {
+        userAccountService.addBookToRead(getCurrentUser(), bookIdDTO.getId());
     }
 }
