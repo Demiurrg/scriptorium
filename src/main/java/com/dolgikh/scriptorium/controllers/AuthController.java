@@ -1,6 +1,6 @@
 package com.dolgikh.scriptorium.controllers;
 
-import com.dolgikh.scriptorium.dto.user.UserAccountRequestDTO;
+import com.dolgikh.scriptorium.dto.users.UserAccountRequestDTO;
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.security.JWTUtil;
 import com.dolgikh.scriptorium.services.UserAccountService;

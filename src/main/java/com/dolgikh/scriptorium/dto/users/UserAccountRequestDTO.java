@@ -1,4 +1,4 @@
-package com.dolgikh.scriptorium.dto.user;
+package com.dolgikh.scriptorium.dto.users;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

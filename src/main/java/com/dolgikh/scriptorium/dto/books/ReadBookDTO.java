@@ -1,4 +1,4 @@
-package com.dolgikh.scriptorium.dto.user;
+package com.dolgikh.scriptorium.dto.books;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

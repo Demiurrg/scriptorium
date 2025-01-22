@@ -1,7 +1,7 @@
 package com.dolgikh.scriptorium.controllers;
 
 import com.dolgikh.scriptorium.dto.books.BookIdDTO;
-import com.dolgikh.scriptorium.dto.user.UserAccountResponseDTO;
+import com.dolgikh.scriptorium.dto.users.UserAccountResponseDTO;
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.security.UserAccountDetails;
 import com.dolgikh.scriptorium.services.UserAccountService;
