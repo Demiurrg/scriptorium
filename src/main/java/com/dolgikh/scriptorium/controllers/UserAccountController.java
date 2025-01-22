@@ -20,7 +20,7 @@ public class UserAccountController {
     private UserAccount getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserAccountDetails userAccountDetails = (UserAccountDetails) authentication.getPrincipal();
-        return userAccountService.show(userAccountDetails.getUsername());
+        return userAccountService.findByUsername(userAccountDetails.getUsername());
     }
 
     @Autowired

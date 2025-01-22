@@ -23,9 +23,9 @@ public class UserAccount {
 
     public UserAccount() {}
 
-    public UserAccount(String password, String username) {
-        this.password = password;
+    public UserAccount(String username, String password) {
         this.username = username;
+        this.password = password;
     }
 
     public int getId() {

@@ -29,7 +29,7 @@ public class UserAccountService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserAccount show(String username) {
+    public UserAccount findByUsername(String username) {
         return userAccountRepository.findByUsername(username);
     }
 

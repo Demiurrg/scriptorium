@@ -8,6 +8,8 @@ public class UserAccountRequestDTO {
     @Size(min = 2, max = 100, message = "Name should be between 2 and 100 characters")
     private String username;
 
+    @NotEmpty(message = "Password should not be empty")
+    @Size(min = 8, max = 100, message = "Password should be between 8 and 100 characters")
     private String password;
 
     public UserAccountRequestDTO() {}
