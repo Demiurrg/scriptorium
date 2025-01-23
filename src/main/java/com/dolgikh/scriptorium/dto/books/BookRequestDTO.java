@@ -18,11 +18,11 @@ public class BookRequestDTO {
         this.genreIds = genreIds;
     }
 
-    public @Size(min = 2, max = 200) String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(@Size(min = 2, max = 200) String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 

@@ -57,16 +57,14 @@ public class JWTFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || authHeader.isBlank() || !authHeader.startsWith("Bearer ")) {
-            setErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST,
-                    "JWT Token was not found");
+            setErrorResponse(response, "JWT Token was not found");
             return;
         }
 
         String jwt = authHeader.substring(7);
 
         if (jwt.isBlank()) {
-            setErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST,
-                    "Blank JWT Token");
+            setErrorResponse(response, "Blank JWT Token");
             return;
         }
 
@@ -83,16 +81,15 @@ public class JWTFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         } catch (JWTVerificationException exc) {
-            setErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST,
-                    "Invalid JWT Token");
+            setErrorResponse(response, "Invalid JWT Token");
             return;
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private void setErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
-        response.setStatus(status);
+    private void setErrorResponse(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
