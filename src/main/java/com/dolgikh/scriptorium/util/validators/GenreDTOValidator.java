@@ -2,6 +2,7 @@ package com.dolgikh.scriptorium.util.validators;
 
 import com.dolgikh.scriptorium.dto.GenreDTO;
 import com.dolgikh.scriptorium.repositories.GenresRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -17,12 +18,12 @@ public class GenreDTOValidator implements Validator {
     }
 
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(@NotNull Class<?> clazz) {
         return GenreDTO.class.equals(clazz);
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(@NotNull Object target, @NotNull Errors errors) {
         GenreDTO genreDTO = (GenreDTO) target;
         if (genresRepository.findByName(genreDTO.getName()).isPresent())
             errors.rejectValue("name", "", "Genre " + genreDTO.getName() + " already exists");
