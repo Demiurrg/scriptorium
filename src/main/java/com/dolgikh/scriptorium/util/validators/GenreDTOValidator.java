@@ -24,7 +24,7 @@ public class GenreDTOValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         GenreDTO genreDTO = (GenreDTO) target;
-        if (genresRepository.findByName(genreDTO.getName()) != null)
+        if (genresRepository.findByName(genreDTO.getName()).isPresent())
             errors.rejectValue("name", "", "Genre " + genreDTO.getName() + " already exists");
     }
 }

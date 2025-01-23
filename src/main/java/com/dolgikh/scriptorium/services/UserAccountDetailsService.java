@@ -3,6 +3,7 @@ package com.dolgikh.scriptorium.services;
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.repositories.UserAccountRepository;
 import com.dolgikh.scriptorium.security.UserAccountDetails;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,10 +21,8 @@ public class UserAccountDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserAccount userAccount = userAccountRepository.findByUsername(username);
-
-        if (userAccount == null)
-            throw new UsernameNotFoundException("User was not found");
+        UserAccount userAccount = userAccountRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User with name " + username + " was not found"));
 
         return new UserAccountDetails(userAccount);
     }

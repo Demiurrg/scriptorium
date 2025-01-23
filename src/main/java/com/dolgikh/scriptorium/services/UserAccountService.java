@@ -31,7 +31,8 @@ public class UserAccountService {
     }
 
     public UserAccount findByUsername(String username) {
-        return userAccountRepository.findByUsername(username);
+        return userAccountRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User with name " + username + " was not found"));
     }
 
     @Transactional
@@ -48,7 +49,7 @@ public class UserAccountService {
             throw new IllegalArgumentException("Пользователь с id " + userAccount.getId() + " не найден");
 
         if (userReadingHistoryRepository.findByUserIdAndBookId(userAccount.getId(), bookId).isPresent())
-            throw new EntityNotFoundException("Книга с id " + bookId + " уже прочитана");
+            throw new IllegalArgumentException("Книга с id " + bookId + " уже прочитана");
 
         userReadingHistoryRepository.save(new UserReadingHistory(userAccount, book, new Date()));
     }
@@ -62,7 +63,7 @@ public class UserAccountService {
             throw new IllegalArgumentException("Пользователь с id " + userId + " не найден");
 
         if (userReadingHistoryRepository.findByUserIdAndBookId(userId, bookId).isEmpty())
-            throw new EntityNotFoundException("Книга с id " + bookId + " ещё не прочитана");
+            throw new IllegalArgumentException("Книга с id " + bookId + " ещё не прочитана");
 
         userReadingHistoryRepository.deleteByUserIdAndBookId(userId, bookId);
     }

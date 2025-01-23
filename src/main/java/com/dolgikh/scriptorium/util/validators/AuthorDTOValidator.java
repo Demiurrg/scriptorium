@@ -28,7 +28,7 @@ public class AuthorDTOValidator implements Validator {
     public void validate(Object target, Errors errors) {
         AuthorDTO authorDTO = (AuthorDTO) target;
 
-        if (authorsRepository.findByName(authorDTO.getName()) != null)
+        if (authorsRepository.findByName(authorDTO.getName()).isPresent())
             errors.rejectValue("name", "", "Author with name " + authorDTO.getName() + " already exists");
 
         if (authorDTO.getDateOfBirth().getTime() > new Date().getTime())
