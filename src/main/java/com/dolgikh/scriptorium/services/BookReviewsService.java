@@ -2,7 +2,7 @@ package com.dolgikh.scriptorium.services;
 
 import com.dolgikh.scriptorium.models.BookReview;
 import com.dolgikh.scriptorium.repositories.BookReviewsRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.ReviewNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,10 +13,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class BookReviewsService {
     private final BookReviewsRepository bookReviewsRepository;
-
-    private String notFoundMessage(int id) {
-        return "Review with id " + id + " was not found";
-    }
 
     @Autowired
     public BookReviewsService(BookReviewsRepository bookReviewsRepository) {
@@ -39,7 +35,7 @@ public class BookReviewsService {
     @Transactional
     public void update(BookReview bookReview, int id) {
         if (bookReviewsRepository.findById(id).isEmpty())
-            throw new EntityNotFoundException(notFoundMessage(id));
+            throw new ReviewNotFoundException(id);
 
         bookReview.setId(id);
         bookReviewsRepository.save(bookReview);
@@ -48,7 +44,7 @@ public class BookReviewsService {
     @Transactional
     public void delete(int id) {
         if (bookReviewsRepository.findById(id).isEmpty())
-            throw new EntityNotFoundException(notFoundMessage(id));
+            throw new ReviewNotFoundException(id);
 
         bookReviewsRepository.deleteById(id);
     }

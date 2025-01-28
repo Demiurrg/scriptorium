@@ -2,8 +2,7 @@ package com.dolgikh.scriptorium.services;
 
 import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.repositories.BooksRepository;
-import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
-import jakarta.persistence.EntityNotFoundException;
+import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.BookNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +28,7 @@ public class BooksService {
         Optional<Book> book = booksRepository.findById(id);
 
         if (book.isEmpty())
-            throw new EntityNotFoundException(ErrorResponse.bookNotFoundMessage(id));
+            throw new BookNotFoundException(id);
 
         return book.get();
     }
@@ -42,7 +41,7 @@ public class BooksService {
     @Transactional
     public void update(Book book, int id) {
         if (booksRepository.findById(id).isEmpty())
-            throw new EntityNotFoundException(ErrorResponse.bookNotFoundMessage(id));
+            throw new BookNotFoundException(id);
 
         book.setId(id);
         booksRepository.save(book);
@@ -51,7 +50,7 @@ public class BooksService {
     @Transactional
     public void delete(int id) {
         if (booksRepository.findById(id).isEmpty())
-            throw new EntityNotFoundException(ErrorResponse.bookNotFoundMessage(id));
+            throw new BookNotFoundException(id);
 
         booksRepository.deleteById(id);
     }

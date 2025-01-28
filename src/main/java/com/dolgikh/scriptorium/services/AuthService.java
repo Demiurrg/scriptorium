@@ -2,7 +2,7 @@ package com.dolgikh.scriptorium.services;
 
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.security.JWTUtil;
-import jakarta.persistence.EntityNotFoundException;
+import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,7 +24,7 @@ public class AuthService {
 
     public String login(String username, String password) {
         if (userAccountService.findByUsername(username) == null)
-            throw new EntityNotFoundException("User not found");
+            throw new UserNotFoundException(username);
 
         UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(username, password);
 

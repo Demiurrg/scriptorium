@@ -3,7 +3,7 @@ package com.dolgikh.scriptorium.services;
 import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.repositories.GenresRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.GenreNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +15,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class GenresService {
     private final GenresRepository genresRepository;
-
-    private String notFoundMessage(int id) {
-        return "Genre with id " + id + " was not found";
-    }
 
     @Autowired
     public GenresService(GenresRepository genresRepository) {
@@ -33,7 +29,7 @@ public class GenresService {
         Optional<Genre> genre = genresRepository.findById(id);
 
         if (genre.isEmpty())
-            throw new EntityNotFoundException(notFoundMessage(id));
+            throw new GenreNotFoundException(id);
 
         return genre.get();
     }
@@ -50,7 +46,7 @@ public class GenresService {
     @Transactional
     public void update(Genre genre, int id) {
         if (genresRepository.findById(id).isEmpty())
-            throw new EntityNotFoundException(notFoundMessage(id));
+            throw new GenreNotFoundException(id);
 
         genre.setId(id);
         genresRepository.save(genre);
@@ -59,7 +55,7 @@ public class GenresService {
     @Transactional
     public void delete(int id) {
         if (genresRepository.findById(id).isEmpty())
-            throw new EntityNotFoundException(notFoundMessage(id));
+            throw new GenreNotFoundException(id);
 
         genresRepository.deleteById(id);
     }
