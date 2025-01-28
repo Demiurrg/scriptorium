@@ -8,11 +8,11 @@ import java.util.List;
 @Table(name="genre")
 public class Genre {
     @Id
-    @Column(name="id")
+    @Column(name="id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="name")
+    @Column(name="name", nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "genres")

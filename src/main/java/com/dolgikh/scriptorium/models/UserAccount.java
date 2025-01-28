@@ -8,14 +8,14 @@ import java.util.List;
 @Table(name="user_account")
 public class UserAccount {
     @Id
-    @Column(name="id")
+    @Column(name="id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="username")
+    @Column(name="username", nullable = false)
     private String username;
 
-    @Column(name="password")
+    @Column(name="password", nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "user")

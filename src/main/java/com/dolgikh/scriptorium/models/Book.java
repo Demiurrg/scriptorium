@@ -9,11 +9,11 @@ import java.util.List;
 @Table(name="book")
 public class Book {
     @Id
-    @Column(name="id")
+    @Column(name="id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="title")
+    @Column(name="title", nullable = false)
     private String title;
 
     @ManyToMany

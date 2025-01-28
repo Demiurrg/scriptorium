@@ -9,14 +9,14 @@ import java.util.List;
 @Table(name="author")
 public class Author {
     @Id
-    @Column(name="id")
+    @Column(name="id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="name")
+    @Column(name="name", nullable = false)
     private String name;
 
-    @Column(name="date_of_birth")
+    @Column(name="date_of_birth", nullable = false)
     private Date dateOfBirth;
 
     @Column(name="date_of_death")

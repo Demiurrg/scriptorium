@@ -8,7 +8,7 @@ import java.util.Date;
 @Table(name="book_review")
 public class BookReview {
     @Id
-    @Column(name="id")
+    @Column(name="id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
@@ -20,13 +20,13 @@ public class BookReview {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
-    @Column(name = "rating")
+    @Column(name = "rating", nullable = false)
     private int rating;
 
     @Column(name = "text")
     private String text;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private Date date;
 
     public BookReview() {}

@@ -8,7 +8,7 @@ import java.util.Date;
 @Table(name = "user_reading_history")
 public class UserReadingHistory {
     @Id
-    @Column(name="id")
+    @Column(name="id", nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
@@ -20,7 +20,7 @@ public class UserReadingHistory {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private Date date;
 
     public UserReadingHistory() {}
