@@ -38,7 +38,7 @@ public class BooksController {
     }
 
     @GetMapping("/{id}")
-    public BookResponseDTO show(@PathVariable("id") int id) {
+    public BookResponseDTO show(@PathVariable("id") long id) {
         return bookModelMapper.bookToDTO(booksService.findOne(id));
     }
 
@@ -54,7 +54,7 @@ public class BooksController {
     }
 
     @PutMapping("/{id}")
-    public void update(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult, @PathVariable Integer id) {
+    public void update(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult, @PathVariable long id) {
         bookDTOValidator.validate(bookRequestDTO, bindingResult);
 
         if (bindingResult.hasErrors())
@@ -64,7 +64,7 @@ public class BooksController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable("id") long id) {
         booksService.delete(id);
     }
 }

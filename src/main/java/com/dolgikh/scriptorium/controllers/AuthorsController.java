@@ -42,12 +42,12 @@ public class AuthorsController {
     }
 
     @GetMapping("/{id}")
-    public AuthorDTO show(@PathVariable Integer id) {
+    public AuthorDTO show(@PathVariable long id) {
         return modelMapper.map(authorsService.findOne(id), AuthorDTO.class);
     }
 
     @GetMapping("/{id}/books")
-    public List<BookResponseDTO> getBooksOfAuthor(@PathVariable Integer id) {
+    public List<BookResponseDTO> getBooksOfAuthor(@PathVariable long id) {
         return bookModelMapper.allBooksToDTO(authorsService.findBooksOfAuthor(id));
     }
 
@@ -63,7 +63,7 @@ public class AuthorsController {
     }
 
     @PutMapping("/{id}")
-    public void update(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult, @PathVariable Integer id) {
+    public void update(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult, @PathVariable long id) {
         authorDTOValidator.validate(authorDTO, bindingResult);
 
         if (bindingResult.hasErrors())
@@ -73,7 +73,7 @@ public class AuthorsController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable long id) {
         authorsService.delete(id);
     }
 }

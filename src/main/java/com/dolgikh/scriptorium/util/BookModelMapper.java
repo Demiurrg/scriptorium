@@ -31,12 +31,12 @@ public class BookModelMapper {
         Book book = new Book();
         book.setTitle(bookRequestDTO.getTitle());
 
-        for (int authorId : bookRequestDTO.getAuthorIds()) {
+        for (long authorId : bookRequestDTO.getAuthorIds()) {
             Author author = authorsRepository.findById(authorId).orElse(null);
             book.addAuthor(author);
         }
 
-        for (int genreId : bookRequestDTO.getGenreIds()) {
+        for (long genreId : bookRequestDTO.getGenreIds()) {
             Genre genre = genresRepository.findById(genreId).orElse(null);
             book.addGenre(genre);
         }

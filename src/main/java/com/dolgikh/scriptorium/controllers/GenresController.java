@@ -42,12 +42,12 @@ public class GenresController {
     }
 
     @GetMapping("/{id}")
-    public GenreDTO show(@PathVariable Integer id) {
+    public GenreDTO show(@PathVariable long id) {
         return modelMapper.map(genresService.findOne(id), GenreDTO.class);
     }
 
     @GetMapping("/{id}/books")
-    public List<BookResponseDTO> getBooksOfGenre(@PathVariable Integer id) {
+    public List<BookResponseDTO> getBooksOfGenre(@PathVariable long id) {
         return bookModelMapper.allBooksToDTO(genresService.findBooksOfGenre(id));
     }
 
@@ -63,7 +63,7 @@ public class GenresController {
     }
 
     @PutMapping("/{id}")
-    public void update(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult, @PathVariable Integer id) {
+    public void update(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult, @PathVariable long id) {
         genreDTOValidator.validate(genreDTO, bindingResult);
 
         if (bindingResult.hasErrors())
@@ -73,7 +73,7 @@ public class GenresController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable long id) {
         genresService.delete(id);
     }
 }

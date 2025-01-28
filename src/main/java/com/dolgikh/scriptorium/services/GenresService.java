@@ -25,7 +25,7 @@ public class GenresService {
         return genresRepository.findAll();
     }
 
-    public Genre findOne(int id) {
+    public Genre findOne(long id) {
         Optional<Genre> genre = genresRepository.findById(id);
 
         if (genre.isEmpty())
@@ -34,7 +34,7 @@ public class GenresService {
         return genre.get();
     }
 
-    public List<Book> findBooksOfGenre(int id) {
+    public List<Book> findBooksOfGenre(long id) {
         return findOne(id).getBooks();
     }
 
@@ -44,7 +44,7 @@ public class GenresService {
     }
 
     @Transactional
-    public void update(Genre genre, int id) {
+    public void update(Genre genre, long id) {
         if (genresRepository.findById(id).isEmpty())
             throw new GenreNotFoundException(id);
 
@@ -53,7 +53,7 @@ public class GenresService {
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(long id) {
         if (genresRepository.findById(id).isEmpty())
             throw new GenreNotFoundException(id);
 

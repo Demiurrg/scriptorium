@@ -24,7 +24,7 @@ public class BooksService {
         return booksRepository.findAll();
     }
 
-    public Book findOne(int id) {
+    public Book findOne(long id) {
         Optional<Book> book = booksRepository.findById(id);
 
         if (book.isEmpty())
@@ -39,7 +39,7 @@ public class BooksService {
     }
 
     @Transactional
-    public void update(Book book, int id) {
+    public void update(Book book, long id) {
         if (booksRepository.findById(id).isEmpty())
             throw new BookNotFoundException(id);
 
@@ -48,7 +48,7 @@ public class BooksService {
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(long id) {
         if (booksRepository.findById(id).isEmpty())
             throw new BookNotFoundException(id);
 

@@ -1,7 +1,7 @@
 package com.dolgikh.scriptorium.util.exceptions.notfoundexceptions;
 
 public class BookNotFoundException extends ResourceNotFoundException {
-    public BookNotFoundException(int id) {
+    public BookNotFoundException(long id) {
         super("Book", id);
     }
 }

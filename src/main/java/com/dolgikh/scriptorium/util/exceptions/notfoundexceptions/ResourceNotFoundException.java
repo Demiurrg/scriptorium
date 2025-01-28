@@ -1,7 +1,7 @@
 package com.dolgikh.scriptorium.util.exceptions.notfoundexceptions;
 
 public abstract class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException(String resourceName, int id) {
+    public ResourceNotFoundException(String resourceName, long id) {
         super(resourceName + " with id " + id + " was not found");
     }
 

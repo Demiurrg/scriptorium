@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserReadingHistoryRepository extends JpaRepository<UserReadingHistory, Integer> {
-    Optional<UserReadingHistory> findByUserIdAndBookId(int userId, int bookId);
+public interface UserReadingHistoryRepository extends JpaRepository<UserReadingHistory, Long> {
+    Optional<UserReadingHistory> findByUserIdAndBookId(long userId, long bookId);
 
-    void deleteByUserIdAndBookId(int userId, int bookId);
+    void deleteByUserIdAndBookId(long userId, long bookId);
 }

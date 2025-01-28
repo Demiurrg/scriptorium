@@ -44,7 +44,7 @@ public class UserAccountService {
     }
 
     @Transactional
-    public void addBookToRead(UserAccount userAccount, int bookId) {
+    public void addBookToRead(UserAccount userAccount, long bookId) {
         Book book = booksRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException(bookId));
 
         if (userAccountRepository.findById(userAccount.getId()).isEmpty())
@@ -57,7 +57,7 @@ public class UserAccountService {
     }
 
     @Transactional
-    public void deleteBookFromRead(int userId, int bookId) {
+    public void deleteBookFromRead(long userId, long bookId) {
         if (booksRepository.findById(bookId).isEmpty())
             throw new BookNotFoundException(bookId);
 

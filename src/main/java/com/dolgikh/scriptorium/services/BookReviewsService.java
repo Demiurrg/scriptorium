@@ -19,11 +19,11 @@ public class BookReviewsService {
         this.bookReviewsRepository = bookReviewsRepository;
     }
 
-    public List<BookReview> findReviewsForBook(int bookId) {
+    public List<BookReview> findReviewsForBook(long bookId) {
         return bookReviewsRepository.findByBookId(bookId);
     }
 
-    public List<BookReview> findReviewsForUser(int userId) {
+    public List<BookReview> findReviewsForUser(long userId) {
         return bookReviewsRepository.findByUserId(userId);
     }
 
@@ -33,7 +33,7 @@ public class BookReviewsService {
     }
 
     @Transactional
-    public void update(BookReview bookReview, int id) {
+    public void update(BookReview bookReview, long id) {
         if (bookReviewsRepository.findById(id).isEmpty())
             throw new ReviewNotFoundException(id);
 
@@ -42,7 +42,7 @@ public class BookReviewsService {
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(long id) {
         if (bookReviewsRepository.findById(id).isEmpty())
             throw new ReviewNotFoundException(id);
 

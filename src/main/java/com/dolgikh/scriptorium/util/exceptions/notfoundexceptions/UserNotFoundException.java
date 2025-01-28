@@ -1,7 +1,7 @@
 package com.dolgikh.scriptorium.util.exceptions.notfoundexceptions;
 
 public class UserNotFoundException extends ResourceNotFoundException {
-    public UserNotFoundException(int id) {
+    public UserNotFoundException(long id) {
         super("User", id);
     }
 

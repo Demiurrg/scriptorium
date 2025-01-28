@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public class ReadBookDTO {
-    private int bookId;
+    private long bookId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private Date date;
 
-    public int getBookId() {
+    public long getBookId() {
         return bookId;
     }
 

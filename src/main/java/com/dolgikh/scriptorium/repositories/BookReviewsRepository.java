@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface BookReviewsRepository extends JpaRepository<BookReview, Integer> {
-    List<BookReview> findByBookId(int bookId);
+public interface BookReviewsRepository extends JpaRepository<BookReview, Long> {
+    List<BookReview> findByBookId(long bookId);
 
-    List<BookReview> findByUserId(int userId);
+    List<BookReview> findByUserId(long userId);
 }

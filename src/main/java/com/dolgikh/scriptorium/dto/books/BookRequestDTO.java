@@ -7,12 +7,12 @@ import java.util.List;
 public class BookRequestDTO {
     @Size(min = 2, max = 200)
     private String title;
-    private List<Integer> authorIds;
-    private List<Integer> genreIds;
+    private List<Long> authorIds;
+    private List<Long> genreIds;
 
     BookRequestDTO() {}
 
-    public BookRequestDTO(String title, List<Integer> authorIds, List<Integer> genreIds) {
+    public BookRequestDTO(String title, List<Long> authorIds, List<Long> genreIds) {
         this.title = title;
         this.authorIds = authorIds;
         this.genreIds = genreIds;
@@ -26,19 +26,19 @@ public class BookRequestDTO {
         this.title = title;
     }
 
-    public List<Integer> getAuthorIds() {
+    public List<Long> getAuthorIds() {
         return authorIds;
     }
 
-    public void setAuthorIds(List<Integer> authorIds) {
+    public void setAuthorIds(List<Long> authorIds) {
         this.authorIds = authorIds;
     }
 
-    public List<Integer> getGenreIds() {
+    public List<Long> getGenreIds() {
         return genreIds;
     }
 
-    public void setGenreIds(List<Integer> genreIds) {
+    public void setGenreIds(List<Long> genreIds) {
         this.genreIds = genreIds;
     }
 }
