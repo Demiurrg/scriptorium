@@ -3,8 +3,8 @@ package com.dolgikh.scriptorium.controllers;
 import com.dolgikh.scriptorium.dto.books.BookRequestDTO;
 import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
 import com.dolgikh.scriptorium.services.BooksService;
-import com.dolgikh.scriptorium.util.BookModelMapper;
 import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
+import com.dolgikh.scriptorium.util.mappers.BookMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,26 +12,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")
 @RequiredArgsConstructor
 public class BooksController {
     private final BooksService booksService;
-    private final BookModelMapper bookModelMapper;
+    private final BookMapper bookMapper;
 
     @GetMapping
     public List<BookResponseDTO> index() {
-        return booksService.findAll()
-                .stream()
-                .map(bookModelMapper::bookToDTO)
-                .collect(Collectors.toList());
+        return bookMapper.toDTOList(booksService.findAll());
     }
 
     @GetMapping("/{id}")
     public BookResponseDTO show(@PathVariable("id") long id) {
-        return bookModelMapper.bookToDTO(booksService.findOne(id));
+        return bookMapper.toDTO(booksService.findOne(id));
     }
 
     @PostMapping
@@ -40,7 +36,7 @@ public class BooksController {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        booksService.save(bookModelMapper.DTOtoBook(bookRequestDTO));
+        booksService.save(bookMapper.toEntity(bookRequestDTO));
     }
 
     @PutMapping("/{id}")
@@ -48,7 +44,7 @@ public class BooksController {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        booksService.update(bookModelMapper.DTOtoBook(bookRequestDTO), id);
+        booksService.update(bookMapper.toEntity(bookRequestDTO), id);
     }
 
     @DeleteMapping("/{id}")

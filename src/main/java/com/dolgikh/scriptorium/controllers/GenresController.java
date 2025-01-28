@@ -2,13 +2,12 @@ package com.dolgikh.scriptorium.controllers;
 
 import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
 import com.dolgikh.scriptorium.dto.GenreDTO;
-import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.services.GenresService;
-import com.dolgikh.scriptorium.util.BookModelMapper;
 import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
+import com.dolgikh.scriptorium.util.mappers.BookMapper;
+import com.dolgikh.scriptorium.util.mappers.GenreMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,25 +20,25 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GenresController {
     private final GenresService genresService;
-    private final ModelMapper modelMapper;
-    private final BookModelMapper bookModelMapper;
+    private final GenreMapper genreMapper;
+    private final BookMapper bookMapper;
 
     @GetMapping
     public List<GenreDTO> index() {
         return genresService.findAll()
                 .stream()
-                .map(genre -> modelMapper.map(genre, GenreDTO.class))
+                .map(genreMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public GenreDTO show(@PathVariable long id) {
-        return modelMapper.map(genresService.findOne(id), GenreDTO.class);
+        return genreMapper.toDTO(genresService.findOne(id));
     }
 
     @GetMapping("/{id}/books")
     public List<BookResponseDTO> getBooksOfGenre(@PathVariable long id) {
-        return bookModelMapper.allBooksToDTO(genresService.findBooksOfGenre(id));
+        return bookMapper.toDTOList(genresService.findBooksOfGenre(id));
     }
 
     @PostMapping
@@ -48,7 +47,7 @@ public class GenresController {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        genresService.save(modelMapper.map(genreDTO, Genre.class));
+        genresService.save(genreMapper.toEntity(genreDTO));
     }
 
     @PutMapping("/{id}")
@@ -56,7 +55,7 @@ public class GenresController {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        genresService.update(modelMapper.map(genreDTO, Genre.class), id);
+        genresService.update(genreMapper.toEntity(genreDTO), id);
     }
 
     @DeleteMapping("/{id}")

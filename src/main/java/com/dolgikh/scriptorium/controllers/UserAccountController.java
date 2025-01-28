@@ -5,8 +5,8 @@ import com.dolgikh.scriptorium.dto.users.UserAccountResponseDTO;
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.security.UserAccountDetails;
 import com.dolgikh.scriptorium.services.UserAccountService;
+import com.dolgikh.scriptorium.util.mappers.UserAccountMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserAccountController {
     private final UserAccountService userAccountService;
-    private final ModelMapper modelMapper;
+    private final UserAccountMapper userAccountMapper;
 
     private UserAccount getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -26,16 +26,16 @@ public class UserAccountController {
 
     @GetMapping
     public UserAccountResponseDTO showCurrentUser() {
-        return modelMapper.map(getCurrentUser(), UserAccountResponseDTO.class);
+        return userAccountMapper.toDTO(getCurrentUser());
     }
 
     @PostMapping("/readBooks")
     public void addBookToRead(@RequestBody BookIdDTO bookIdDTO) {
-        userAccountService.addBookToRead(getCurrentUser(), bookIdDTO.getId());
+        userAccountService.addBookToRead(getCurrentUser(), bookIdDTO.id());
     }
 
     @DeleteMapping("/readBooks")
     public void deleteBookFromRead(@RequestBody BookIdDTO bookIdDTO) {
-        userAccountService.deleteBookFromRead(getCurrentUser().getId(), bookIdDTO.getId());
+        userAccountService.deleteBookFromRead(getCurrentUser().getId(), bookIdDTO.id());
     }
 }

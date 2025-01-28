@@ -2,14 +2,13 @@ package com.dolgikh.scriptorium.controllers;
 
 import com.dolgikh.scriptorium.dto.AuthorDTO;
 import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
-import com.dolgikh.scriptorium.models.Author;
 import com.dolgikh.scriptorium.services.AuthorsService;
-import com.dolgikh.scriptorium.util.BookModelMapper;
 import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
+import com.dolgikh.scriptorium.util.mappers.AuthorMapper;
+import com.dolgikh.scriptorium.util.mappers.BookMapper;
 import com.dolgikh.scriptorium.util.validators.AuthorDTOValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,26 +21,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthorsController {
     private final AuthorsService authorsService;
-    private final ModelMapper modelMapper;
-    private final BookModelMapper bookModelMapper;
+    private final AuthorMapper authorMapper;
+    private final BookMapper bookMapper;
     private final AuthorDTOValidator authorDTOValidator;
 
     @GetMapping
     public List<AuthorDTO> index() {
         return authorsService.findAll()
                 .stream()
-                .map(author -> modelMapper.map(author, AuthorDTO.class))
+                .map(authorMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public AuthorDTO show(@PathVariable long id) {
-        return modelMapper.map(authorsService.findOne(id), AuthorDTO.class);
+        return authorMapper.toDTO(authorsService.findOne(id));
     }
 
     @GetMapping("/{id}/books")
     public List<BookResponseDTO> getBooksOfAuthor(@PathVariable long id) {
-        return bookModelMapper.allBooksToDTO(authorsService.findBooksOfAuthor(id));
+        return bookMapper.toDTOList(authorsService.findBooksOfAuthor(id));
     }
 
     @PostMapping
@@ -52,7 +51,7 @@ public class AuthorsController {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        authorsService.save(modelMapper.map(authorDTO, Author.class));
+        authorsService.save(authorMapper.toEntity(authorDTO));
     }
 
     @PutMapping("/{id}")
@@ -62,7 +61,7 @@ public class AuthorsController {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        authorsService.update(modelMapper.map(authorDTO, Author.class), id);
+        authorsService.update(authorMapper.toEntity(authorDTO), id);
     }
 
     @DeleteMapping("/{id}")

@@ -20,13 +20,13 @@ public class AuthorDTOValidator implements Validator {
     public void validate(@NotNull Object target, @NotNull Errors errors) {
         AuthorDTO authorDTO = (AuthorDTO) target;
 
-        if (authorDTO.getDateOfBirth().getTime() > new Date().getTime())
+        if (authorDTO.dateOfBirth().getTime() > new Date().getTime())
             errors.rejectValue("dateOfBirth", "", "Date of birth is in the future");
 
-        if (!authorDTO.isAlive() && authorDTO.getDateOfDeath().getTime() > new Date().getTime())
+        if (!authorDTO.isAlive() && authorDTO.dateOfDeath().getTime() > new Date().getTime())
             errors.rejectValue("dateOfDeath", "", "Date of death is in the future");
 
-        if (!authorDTO.isAlive() && authorDTO.getDateOfDeath().getTime() < authorDTO.getDateOfBirth().getTime())
+        if (!authorDTO.isAlive() && authorDTO.dateOfDeath().getTime() < authorDTO.dateOfBirth().getTime())
             errors.rejectValue("dateOfDeath", "", "Date of death is later than date of birth");
     }
 }

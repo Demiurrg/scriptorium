@@ -22,7 +22,7 @@ public class AuthController {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        return authService.login(userAccountRequestDTO.getUsername(), userAccountRequestDTO.getPassword());
+        return authService.login(userAccountRequestDTO.username(), userAccountRequestDTO.password());
     }
 
     @PostMapping("/registration")
@@ -30,6 +30,6 @@ public class AuthController {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        return authService.registration(userAccountRequestDTO.getUsername(), userAccountRequestDTO.getPassword());
+        return authService.registration(userAccountRequestDTO.username(), userAccountRequestDTO.password());
     }
 }
