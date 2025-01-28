@@ -1,12 +1,18 @@
 package com.dolgikh.scriptorium.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="book")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
     @Id
     @Column(name="id", nullable = false)
@@ -35,61 +41,15 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<UserReadingHistory> readingHistoryList;
 
-    public Book() {}
-
-    public Book(String title) {
-        this.title = title;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<Author> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
-    }
-
     public void addAuthor(Author author) {
         if (authors == null)
             authors = new ArrayList<>();
         authors.add(author);
     }
 
-    public List<Genre> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(List<Genre> genres) {
-        this.genres = genres;
-    }
-
     public void addGenre(Genre genre) {
         if (genres == null)
             genres = new ArrayList<>();
         genres.add(genre);
-    }
-
-    public List<UserReadingHistory> getReadingHistoryList() {
-        return readingHistoryList;
-    }
-
-    public void setReadingHistoryList(List<UserReadingHistory> readingHistoryList) {
-        this.readingHistoryList = readingHistoryList;
     }
 }

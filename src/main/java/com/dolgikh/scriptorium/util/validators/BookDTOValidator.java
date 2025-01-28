@@ -30,15 +30,15 @@ public class BookDTOValidator implements Validator {
     @Override
     public void validate(@NotNull Object target, @NotNull Errors errors) {
         BookRequestDTO book = (BookRequestDTO) target;
-        List<Integer> authorIds = book.getAuthorIds();
-        List<Integer> genreIds = book.getGenreIds();
+        List<Long> authorIds = book.getAuthorIds();
+        List<Long> genreIds = book.getGenreIds();
 
-        for (int authorId : authorIds) {
+        for (long authorId : authorIds) {
             if (authorsRepository.findById(authorId).isEmpty())
                 errors.rejectValue("authorIds", "", "Author with ID " + authorId + " does not exist");
         }
 
-        for (int genreId : genreIds) {
+        for (long genreId : genreIds) {
             if (genresRepository.findById(genreId).isEmpty())
                 errors.rejectValue("genreIds", "", "Genre with ID " + genreId + " does not exist");
         }
