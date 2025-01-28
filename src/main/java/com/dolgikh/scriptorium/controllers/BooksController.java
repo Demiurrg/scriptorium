@@ -9,7 +9,6 @@ import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,32 +43,28 @@ public class BooksController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult) {
         bookDTOValidator.validate(bookRequestDTO, bindingResult);
 
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
         booksService.save(bookModelMapper.DTOtoBook(bookRequestDTO));
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult, @PathVariable Integer id) {
+    public void update(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult, @PathVariable Integer id) {
         bookDTOValidator.validate(bookRequestDTO, bindingResult);
 
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
         booksService.update(bookModelMapper.DTOtoBook(bookRequestDTO), id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable("id") int id) {
         booksService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -5,7 +5,6 @@ import com.dolgikh.scriptorium.services.AuthService;
 import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,18 +22,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> performLogin(@RequestBody @Valid UserAccountRequestDTO userAccountRequestDTO, BindingResult bindingResult) {
+    public String performLogin(@RequestBody @Valid UserAccountRequestDTO userAccountRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        return ResponseEntity.ok(authService.login(userAccountRequestDTO.getUsername(), userAccountRequestDTO.getPassword()));
+        return authService.login(userAccountRequestDTO.getUsername(), userAccountRequestDTO.getPassword());
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<String> performRegistration(@RequestBody @Valid UserAccountRequestDTO userAccountRequestDTO, BindingResult bindingResult) {
+    public String performRegistration(@RequestBody @Valid UserAccountRequestDTO userAccountRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
-        return ResponseEntity.ok(authService.registration(userAccountRequestDTO.getUsername(), userAccountRequestDTO.getPassword()));
+        return authService.registration(userAccountRequestDTO.getUsername(), userAccountRequestDTO.getPassword());
     }
 }

@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,30 +52,28 @@ public class GenresController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult) {
         genreDTOValidator.validate(genreDTO, bindingResult);
 
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
         genresService.save(modelMapper.map(genreDTO, Genre.class));
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult, @PathVariable Integer id) {
+    public void update(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult, @PathVariable Integer id) {
         genreDTOValidator.validate(genreDTO, bindingResult);
 
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
         genresService.update(modelMapper.map(genreDTO, Genre.class), id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Integer id) {
         genresService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

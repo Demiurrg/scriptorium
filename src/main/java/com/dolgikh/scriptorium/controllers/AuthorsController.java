@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,30 +52,28 @@ public class AuthorsController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult) {
         authorDTOValidator.validate(authorDTO, bindingResult);
 
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
         authorsService.save(modelMapper.map(authorDTO, Author.class));
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult, @PathVariable Integer id) {
+    public void update(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult, @PathVariable Integer id) {
         authorDTOValidator.validate(authorDTO, bindingResult);
 
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
         authorsService.update(modelMapper.map(authorDTO, Author.class), id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Integer id) {
         authorsService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
