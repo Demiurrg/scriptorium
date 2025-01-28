@@ -7,25 +7,19 @@ import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.repositories.AuthorsRepository;
 import com.dolgikh.scriptorium.repositories.GenresRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class BookModelMapper {
     private final AuthorsRepository authorsRepository;
     private final GenresRepository genresRepository;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public BookModelMapper(AuthorsRepository authorsRepository, GenresRepository genresRepository, ModelMapper modelMapper) {
-        this.authorsRepository = authorsRepository;
-        this.genresRepository = genresRepository;
-        this.modelMapper = modelMapper;
-    }
 
     public Book DTOtoBook(BookRequestDTO bookRequestDTO) {
         Book book = new Book();

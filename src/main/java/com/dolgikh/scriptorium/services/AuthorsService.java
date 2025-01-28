@@ -4,7 +4,7 @@ import com.dolgikh.scriptorium.models.Author;
 import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.repositories.AuthorsRepository;
 import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.AuthorNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,13 +13,9 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class AuthorsService {
     private final AuthorsRepository authorsRepository;
-
-    @Autowired
-    public AuthorsService(AuthorsRepository authorsRepository) {
-        this.authorsRepository = authorsRepository;
-    }
 
     public List<Author> findAll() {
         return authorsRepository.findAll();

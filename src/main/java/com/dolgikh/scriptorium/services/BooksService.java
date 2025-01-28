@@ -3,7 +3,7 @@ package com.dolgikh.scriptorium.services;
 import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.repositories.BooksRepository;
 import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.BookNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +12,9 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class BooksService {
     private final BooksRepository booksRepository;
-
-    @Autowired
-    public BooksService(BooksRepository booksRepository) {
-        this.booksRepository = booksRepository;
-    }
 
     public List<Book> findAll() {
         return booksRepository.findAll();

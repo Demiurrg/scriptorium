@@ -3,7 +3,7 @@ package com.dolgikh.scriptorium.services;
 import com.dolgikh.scriptorium.models.BookReview;
 import com.dolgikh.scriptorium.repositories.BookReviewsRepository;
 import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.ReviewNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,13 +11,9 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class BookReviewsService {
     private final BookReviewsRepository bookReviewsRepository;
-
-    @Autowired
-    public BookReviewsService(BookReviewsRepository bookReviewsRepository) {
-        this.bookReviewsRepository = bookReviewsRepository;
-    }
 
     public List<BookReview> findReviewsForBook(long bookId) {
         return bookReviewsRepository.findByBookId(bookId);

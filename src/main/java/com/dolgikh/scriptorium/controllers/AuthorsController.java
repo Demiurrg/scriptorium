@@ -8,8 +8,8 @@ import com.dolgikh.scriptorium.util.BookModelMapper;
 import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import com.dolgikh.scriptorium.util.validators.AuthorDTOValidator;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +19,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/authors")
+@RequiredArgsConstructor
 public class AuthorsController {
     private final AuthorsService authorsService;
     private final ModelMapper modelMapper;
     private final BookModelMapper bookModelMapper;
     private final AuthorDTOValidator authorDTOValidator;
-
-    @Autowired
-    public AuthorsController(AuthorsService authorsService, ModelMapper modelMapper, BookModelMapper bookModelMapper, AuthorDTOValidator authorDTOValidator) {
-        this.authorsService = authorsService;
-        this.modelMapper = modelMapper;
-        this.bookModelMapper = bookModelMapper;
-        this.authorDTOValidator = authorDTOValidator;
-    }
 
     @GetMapping
     public List<AuthorDTO> index() {

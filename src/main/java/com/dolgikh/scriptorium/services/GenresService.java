@@ -4,7 +4,7 @@ import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.repositories.GenresRepository;
 import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.GenreNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,13 +13,9 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class GenresService {
     private final GenresRepository genresRepository;
-
-    @Autowired
-    public GenresService(GenresRepository genresRepository) {
-        this.genresRepository = genresRepository;
-    }
 
     public List<Genre> findAll() {
         return genresRepository.findAll();

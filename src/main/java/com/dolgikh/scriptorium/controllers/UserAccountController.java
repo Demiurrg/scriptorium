@@ -5,14 +5,15 @@ import com.dolgikh.scriptorium.dto.users.UserAccountResponseDTO;
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.security.UserAccountDetails;
 import com.dolgikh.scriptorium.services.UserAccountService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserAccountController {
     private final UserAccountService userAccountService;
     private final ModelMapper modelMapper;
@@ -21,12 +22,6 @@ public class UserAccountController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserAccountDetails userAccountDetails = (UserAccountDetails) authentication.getPrincipal();
         return userAccountService.findByUsername(userAccountDetails.getUsername());
-    }
-
-    @Autowired
-    public UserAccountController(UserAccountService userAccountService, ModelMapper modelMapper) {
-        this.userAccountService = userAccountService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping

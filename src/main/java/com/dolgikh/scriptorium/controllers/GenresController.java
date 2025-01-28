@@ -8,8 +8,8 @@ import com.dolgikh.scriptorium.util.BookModelMapper;
 import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import com.dolgikh.scriptorium.util.validators.GenreDTOValidator;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +19,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/genres")
+@RequiredArgsConstructor
 public class GenresController {
     private final GenresService genresService;
     private final ModelMapper modelMapper;
     private final BookModelMapper bookModelMapper;
     private final GenreDTOValidator genreDTOValidator;
-
-    @Autowired
-    public GenresController(GenresService genresService, ModelMapper modelMapper, BookModelMapper bookModelMapper, GenreDTOValidator genreDTOValidator) {
-        this.genresService = genresService;
-        this.modelMapper = modelMapper;
-        this.bookModelMapper = bookModelMapper;
-        this.genreDTOValidator = genreDTOValidator;
-    }
 
     @GetMapping
     public List<GenreDTO> index() {
