@@ -21,6 +21,14 @@ public class ErrorResponse {
         this.message = message;
     }
 
+    public static String bookNotFoundMessage(int id) {
+        return "Book with id " + id + " was not found";
+    }
+
+    public static String userNotFoundMessage(int id) {
+        return "Book with id " + id + " was not found";
+    }
+
     public static String printFieldErrors(List<FieldError> fieldErrors) {
         StringBuilder errorMessage = new StringBuilder();
 

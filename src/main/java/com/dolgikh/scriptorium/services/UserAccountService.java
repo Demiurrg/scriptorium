@@ -6,6 +6,7 @@ import com.dolgikh.scriptorium.models.UserReadingHistory;
 import com.dolgikh.scriptorium.repositories.BooksRepository;
 import com.dolgikh.scriptorium.repositories.UserAccountRepository;
 import com.dolgikh.scriptorium.repositories.UserReadingHistoryRepository;
+import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,7 +44,7 @@ public class UserAccountService {
 
     @Transactional
     public void addBookToRead(UserAccount userAccount, int bookId) {
-        Book book = booksRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Книга с id " + bookId + " не найдена"));
+        Book book = booksRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException(ErrorResponse.bookNotFoundMessage(bookId)));
 
         if (userAccountRepository.findById(userAccount.getId()).isEmpty())
             throw new IllegalArgumentException("Пользователь с id " + userAccount.getId() + " не найден");
@@ -57,10 +58,10 @@ public class UserAccountService {
     @Transactional
     public void deleteBookFromRead(int userId, int bookId) {
         if (booksRepository.findById(bookId).isEmpty())
-            throw new IllegalArgumentException("Книга с id " + bookId + " не найдена");
+            throw new IllegalArgumentException(ErrorResponse.bookNotFoundMessage(bookId));
 
         if (userAccountRepository.findById(userId).isEmpty())
-            throw new IllegalArgumentException("Пользователь с id " + userId + " не найден");
+            throw new IllegalArgumentException(ErrorResponse.userNotFoundMessage(userId));
 
         if (userReadingHistoryRepository.findByUserIdAndBookId(userId, bookId).isEmpty())
             throw new IllegalArgumentException("Книга с id " + bookId + " ещё не прочитана");
