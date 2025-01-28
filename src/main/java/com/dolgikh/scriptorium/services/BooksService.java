@@ -4,10 +4,10 @@ import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.repositories.BooksRepository;
 import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.BookNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -15,8 +15,8 @@ import java.util.List;
 public class BooksService {
     private final BooksRepository booksRepository;
 
-    public List<Book> findAll() {
-        return booksRepository.findAll();
+    public Page<Book> findAll(Pageable pageable) {
+        return booksRepository.findAll(pageable);
     }
 
     public Book findOne(long id) {

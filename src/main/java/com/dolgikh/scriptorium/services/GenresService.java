@@ -5,10 +5,11 @@ import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.repositories.GenresRepository;
 import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.GenreNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +18,12 @@ import java.util.Optional;
 public class GenresService {
     private final GenresRepository genresRepository;
 
-    public List<Genre> findAll() {
-        return genresRepository.findAll();
+    public Page<Genre> findAll(Pageable pageable) {
+        return genresRepository.findAll(pageable);
+    }
+
+    public Page<Book> findBooksByGenre(long id, Pageable pageable) {
+        return genresRepository.findBooksByGenreId(id, pageable);
     }
 
     public Genre findOne(long id) {
@@ -28,10 +33,6 @@ public class GenresService {
             throw new GenreNotFoundException(id);
 
         return genre.get();
-    }
-
-    public List<Book> findBooksOfGenre(long id) {
-        return findOne(id).getBooks();
     }
 
     @Transactional

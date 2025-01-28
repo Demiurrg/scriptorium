@@ -6,10 +6,10 @@ import com.dolgikh.scriptorium.services.BooksService;
 import com.dolgikh.scriptorium.util.mappers.BookMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/books")
@@ -19,8 +19,9 @@ public class BooksController {
     private final BookMapper bookMapper;
 
     @GetMapping
-    public List<BookResponseDTO> index() {
-        return bookMapper.toDTOList(booksService.findAll());
+    public Page<BookResponseDTO> index(@RequestParam(value = "page", defaultValue = "0") int page,
+                                       @RequestParam(value = "size", defaultValue = "10") int size) {
+        return booksService.findAll(PageRequest.of(page, size)).map(bookMapper::toDTO);
     }
 
     @GetMapping("/{id}")

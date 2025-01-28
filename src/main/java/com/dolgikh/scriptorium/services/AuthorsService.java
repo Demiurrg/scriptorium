@@ -5,10 +5,11 @@ import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.repositories.AuthorsRepository;
 import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.AuthorNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +18,8 @@ import java.util.Optional;
 public class AuthorsService {
     private final AuthorsRepository authorsRepository;
 
-    public List<Author> findAll() {
-        return authorsRepository.findAll();
+    public Page<Author> findAll(Pageable pageable) {
+        return authorsRepository.findAll(pageable);
     }
 
     public Author findOne(long id) {
@@ -30,8 +31,8 @@ public class AuthorsService {
         return author.get();
     }
 
-    public List<Book> findBooksOfAuthor(long id) {
-        return findOne(id).getBooks();
+    public Page<Book> findBooksByAuthor(long id, Pageable pageable) {
+        return authorsRepository.findBooksByAuthorId(id, pageable);
     }
 
     @Transactional

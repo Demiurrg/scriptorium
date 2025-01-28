@@ -7,11 +7,10 @@ import com.dolgikh.scriptorium.util.mappers.BookMapper;
 import com.dolgikh.scriptorium.util.mappers.GenreMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/genres")
@@ -22,11 +21,9 @@ public class GenresController {
     private final BookMapper bookMapper;
 
     @GetMapping
-    public List<GenreDTO> index() {
-        return genresService.findAll()
-                .stream()
-                .map(genreMapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<GenreDTO> index(@RequestParam(value = "page", defaultValue = "0") int page,
+                                @RequestParam(value = "size", defaultValue = "10") int size) {
+        return genresService.findAll(PageRequest.of(page, size)).map(genreMapper::toDTO);
     }
 
     @GetMapping("/{id}")
@@ -35,8 +32,10 @@ public class GenresController {
     }
 
     @GetMapping("/{id}/books")
-    public List<BookResponseDTO> getBooksOfGenre(@PathVariable long id) {
-        return bookMapper.toDTOList(genresService.findBooksOfGenre(id));
+    public Page<BookResponseDTO> getBooksByGenre(@PathVariable long id,
+                                                 @RequestParam(value = "page", defaultValue = "0") int page,
+                                                 @RequestParam(value = "size", defaultValue = "10") int size) {
+        return genresService.findBooksByGenre(id, PageRequest.of(page, size)).map(bookMapper::toDTO);
     }
 
     @PostMapping

@@ -8,13 +8,14 @@ import com.dolgikh.scriptorium.util.mappers.BookMapper;
 import com.dolgikh.scriptorium.util.validators.AuthorDTOValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/authors")
@@ -39,11 +40,9 @@ public class AuthorsController {
     }
 
     @GetMapping
-    public List<AuthorDTO> index() {
-        return authorsService.findAll()
-                .stream()
-                .map(authorMapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<AuthorDTO> index(@RequestParam(value = "page", defaultValue = "0") int page,
+                                 @RequestParam(value = "size", defaultValue = "10") int size) {
+        return authorsService.findAll(PageRequest.of(page, size)).map(authorMapper::toDTO);
     }
 
     @GetMapping("/{id}")
@@ -52,8 +51,10 @@ public class AuthorsController {
     }
 
     @GetMapping("/{id}/books")
-    public List<BookResponseDTO> getBooksOfAuthor(@PathVariable long id) {
-        return bookMapper.toDTOList(authorsService.findBooksOfAuthor(id));
+    public Page<BookResponseDTO> getBooksByAuthor(@PathVariable long id,
+                                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                                  @RequestParam(value = "size", defaultValue = "10") int size) {
+        return authorsService.findBooksByAuthor(id, PageRequest.of(page, size)).map(bookMapper::toDTO);
     }
 
     @PostMapping
