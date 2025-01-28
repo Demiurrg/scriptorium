@@ -3,7 +3,6 @@ package com.dolgikh.scriptorium.config;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.dolgikh.scriptorium.security.JWTUtil;
 import com.dolgikh.scriptorium.services.UserAccountDetailsService;
-import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter {
@@ -93,7 +93,7 @@ public class JWTFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        String json = objectMapper.writeValueAsString(new ErrorResponse(message));
+        String json = objectMapper.writeValueAsString(Map.of("message", message));
 
         response.getWriter().write(json);
     }
