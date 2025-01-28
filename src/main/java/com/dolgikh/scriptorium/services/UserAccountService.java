@@ -3,7 +3,6 @@ package com.dolgikh.scriptorium.services;
 import com.dolgikh.scriptorium.models.Book;
 import com.dolgikh.scriptorium.models.UserAccount;
 import com.dolgikh.scriptorium.models.UserReadingHistory;
-import com.dolgikh.scriptorium.repositories.BooksRepository;
 import com.dolgikh.scriptorium.repositories.UserAccountRepository;
 import com.dolgikh.scriptorium.repositories.UserReadingHistoryRepository;
 import com.dolgikh.scriptorium.util.exceptions.notfoundexceptions.BookNotFoundException;
@@ -22,12 +21,20 @@ import java.util.Date;
 public class UserAccountService {
     private final UserAccountRepository userAccountRepository;
     private final UserReadingHistoryRepository userReadingHistoryRepository;
-    private final BooksRepository booksRepository;
+    private final BooksService booksService;
     private final PasswordEncoder passwordEncoder;
 
     public UserAccount findByUsername(String username) {
         return userAccountRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User with name " + username + " was not found"));
+    }
+
+    public boolean doesUserExist(long id) {
+        return userAccountRepository.findById(id).isPresent();
+    }
+
+    public boolean doesUserExist(String username) {
+        return userAccountRepository.findByUsername(username).isPresent();
     }
 
     @Transactional
@@ -38,27 +45,27 @@ public class UserAccountService {
 
     @Transactional
     public void addBookToRead(UserAccount userAccount, long bookId) {
-        Book book = booksRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException(bookId));
+        Book book = booksService.findOne(bookId);
 
-        if (userAccountRepository.findById(userAccount.getId()).isEmpty())
-            throw new IllegalArgumentException("Пользователь с id " + userAccount.getId() + " не найден");
+        if (!doesUserExist(userAccount.getId()))
+            throw new UserNotFoundException(userAccount.getId());
 
         if (userReadingHistoryRepository.findByUserIdAndBookId(userAccount.getId(), bookId).isPresent())
-            throw new IllegalArgumentException("Книга с id " + bookId + " уже прочитана");
+            throw new IllegalArgumentException("Book with id " + bookId + " has already been read");
 
         userReadingHistoryRepository.save(new UserReadingHistory(userAccount, book, new Date()));
     }
 
     @Transactional
     public void deleteBookFromRead(long userId, long bookId) {
-        if (booksRepository.findById(bookId).isEmpty())
+        if (!booksService.doesBookExist(bookId))
             throw new BookNotFoundException(bookId);
 
-        if (userAccountRepository.findById(userId).isEmpty())
+        if (!doesUserExist(userId))
             throw new UserNotFoundException(userId);
 
         if (userReadingHistoryRepository.findByUserIdAndBookId(userId, bookId).isEmpty())
-            throw new IllegalArgumentException("Книга с id " + bookId + " ещё не прочитана");
+            throw new IllegalArgumentException("Book with id " + bookId + " has not been read yet");
 
         userReadingHistoryRepository.deleteByUserIdAndBookId(userId, bookId);
     }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,12 +20,11 @@ public class BooksService {
     }
 
     public Book findOne(long id) {
-        Optional<Book> book = booksRepository.findById(id);
+        return booksRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    }
 
-        if (book.isEmpty())
-            throw new BookNotFoundException(id);
-
-        return book.get();
+    public boolean doesBookExist(long id) {
+        return booksRepository.findById(id).isPresent();
     }
 
     @Transactional
@@ -36,7 +34,7 @@ public class BooksService {
 
     @Transactional
     public void update(Book book, long id) {
-        if (booksRepository.findById(id).isEmpty())
+        if (!doesBookExist(id))
             throw new BookNotFoundException(id);
 
         book.setId(id);
@@ -45,7 +43,7 @@ public class BooksService {
 
     @Transactional
     public void delete(long id) {
-        if (booksRepository.findById(id).isEmpty())
+        if (!doesBookExist(id))
             throw new BookNotFoundException(id);
 
         booksRepository.deleteById(id);

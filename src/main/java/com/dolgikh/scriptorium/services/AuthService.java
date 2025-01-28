@@ -17,7 +17,7 @@ public class AuthService {
     private final JWTUtil jwtUtil;
 
     public String login(String username, String password) {
-        if (userAccountService.findByUsername(username) == null)
+        if (!userAccountService.doesUserExist(username))
             throw new UserNotFoundException(username);
 
         UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -32,7 +32,7 @@ public class AuthService {
     }
 
     public String registration(String username, String password) {
-        if (userAccountService.findByUsername(username) != null)
+        if (userAccountService.doesUserExist(username))
             throw new IllegalArgumentException("User with this name already exists");
 
         userAccountService.save(new UserAccount(username, password));
