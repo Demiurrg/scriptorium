@@ -6,7 +6,6 @@ import com.dolgikh.scriptorium.models.Genre;
 import com.dolgikh.scriptorium.services.GenresService;
 import com.dolgikh.scriptorium.util.BookModelMapper;
 import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
-import com.dolgikh.scriptorium.util.validators.GenreDTOValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,7 +23,6 @@ public class GenresController {
     private final GenresService genresService;
     private final ModelMapper modelMapper;
     private final BookModelMapper bookModelMapper;
-    private final GenreDTOValidator genreDTOValidator;
 
     @GetMapping
     public List<GenreDTO> index() {
@@ -47,8 +45,6 @@ public class GenresController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult) {
-        genreDTOValidator.validate(genreDTO, bindingResult);
-
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
@@ -57,8 +53,6 @@ public class GenresController {
 
     @PutMapping("/{id}")
     public void update(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult, @PathVariable long id) {
-        genreDTOValidator.validate(genreDTO, bindingResult);
-
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 

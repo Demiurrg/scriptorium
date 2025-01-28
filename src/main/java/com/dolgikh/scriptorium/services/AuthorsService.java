@@ -36,6 +36,9 @@ public class AuthorsService {
 
     @Transactional
     public void save(Author author) {
+        if (authorsRepository.findByName(author.getName()).isPresent())
+            throw new IllegalArgumentException("Author with name " + author.getName() + " already exists");
+
         authorsRepository.save(author);
     }
 

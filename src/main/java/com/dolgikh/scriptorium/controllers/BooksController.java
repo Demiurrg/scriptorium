@@ -3,7 +3,6 @@ package com.dolgikh.scriptorium.controllers;
 import com.dolgikh.scriptorium.dto.books.BookRequestDTO;
 import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
 import com.dolgikh.scriptorium.services.BooksService;
-import com.dolgikh.scriptorium.util.validators.BookDTOValidator;
 import com.dolgikh.scriptorium.util.BookModelMapper;
 import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import jakarta.validation.Valid;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 public class BooksController {
     private final BooksService booksService;
     private final BookModelMapper bookModelMapper;
-    private final BookDTOValidator bookDTOValidator;
 
     @GetMapping
     public List<BookResponseDTO> index() {
@@ -39,8 +37,6 @@ public class BooksController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult) {
-        bookDTOValidator.validate(bookRequestDTO, bindingResult);
-
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
@@ -49,8 +45,6 @@ public class BooksController {
 
     @PutMapping("/{id}")
     public void update(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult, @PathVariable long id) {
-        bookDTOValidator.validate(bookRequestDTO, bindingResult);
-
         if (bindingResult.hasErrors())
             throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
 
