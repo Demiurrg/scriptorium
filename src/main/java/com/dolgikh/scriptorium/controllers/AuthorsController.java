@@ -3,7 +3,6 @@ package com.dolgikh.scriptorium.controllers;
 import com.dolgikh.scriptorium.dto.AuthorDTO;
 import com.dolgikh.scriptorium.dto.books.BookResponseDTO;
 import com.dolgikh.scriptorium.services.AuthorsService;
-import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import com.dolgikh.scriptorium.util.mappers.AuthorMapper;
 import com.dolgikh.scriptorium.util.mappers.BookMapper;
 import com.dolgikh.scriptorium.util.validators.AuthorDTOValidator;
@@ -11,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +24,19 @@ public class AuthorsController {
     private final AuthorMapper authorMapper;
     private final BookMapper bookMapper;
     private final AuthorDTOValidator authorDTOValidator;
+
+    private String printFieldErrors(List<FieldError> fieldErrors) {
+        StringBuilder errorMessage = new StringBuilder();
+
+        for (FieldError fieldError : fieldErrors)
+            errorMessage
+                    .append(fieldError.getField())
+                    .append(": ")
+                    .append(fieldError.getDefaultMessage())
+                    .append("; ");
+
+        return errorMessage.toString();
+    }
 
     @GetMapping
     public List<AuthorDTO> index() {
@@ -49,7 +62,7 @@ public class AuthorsController {
         authorDTOValidator.validate(authorDTO, bindingResult);
 
         if (bindingResult.hasErrors())
-            throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
+            throw new IllegalArgumentException(printFieldErrors(bindingResult.getFieldErrors()));
 
         authorsService.save(authorMapper.toEntity(authorDTO));
     }
@@ -59,7 +72,7 @@ public class AuthorsController {
         authorDTOValidator.validate(authorDTO, bindingResult);
 
         if (bindingResult.hasErrors())
-            throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
+            throw new IllegalArgumentException(printFieldErrors(bindingResult.getFieldErrors()));
 
         authorsService.update(authorMapper.toEntity(authorDTO), id);
     }

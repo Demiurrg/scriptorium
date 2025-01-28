@@ -2,10 +2,8 @@ package com.dolgikh.scriptorium.controllers;
 
 import com.dolgikh.scriptorium.dto.users.UserAccountRequestDTO;
 import com.dolgikh.scriptorium.services.AuthService;
-import com.dolgikh.scriptorium.util.exceptions.ErrorResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,18 +16,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public String performLogin(@RequestBody @Valid UserAccountRequestDTO userAccountRequestDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
-
+    public String performLogin(@RequestBody @Valid UserAccountRequestDTO userAccountRequestDTO) {
         return authService.login(userAccountRequestDTO.username(), userAccountRequestDTO.password());
     }
 
     @PostMapping("/registration")
-    public String performRegistration(@RequestBody @Valid UserAccountRequestDTO userAccountRequestDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            throw new IllegalArgumentException(ErrorResponse.printFieldErrors(bindingResult.getFieldErrors()));
-
+    public String performRegistration(@RequestBody @Valid UserAccountRequestDTO userAccountRequestDTO) {
         return authService.registration(userAccountRequestDTO.username(), userAccountRequestDTO.password());
     }
 }
