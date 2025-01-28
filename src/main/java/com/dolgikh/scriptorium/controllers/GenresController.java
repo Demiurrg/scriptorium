@@ -34,7 +34,7 @@ public class GenresController {
         this.genreDTOValidator = genreDTOValidator;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<GenreDTO> index() {
         return genresService.findAll()
                 .stream()
@@ -52,7 +52,7 @@ public class GenresController {
         return bookModelMapper.allBooksToDTO(genresService.findBooksOfGenre(id));
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult) {
         genreDTOValidator.validate(genreDTO, bindingResult);
 

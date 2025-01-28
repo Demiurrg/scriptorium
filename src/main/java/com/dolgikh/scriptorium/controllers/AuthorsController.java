@@ -34,7 +34,7 @@ public class AuthorsController {
         this.authorDTOValidator = authorDTOValidator;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<AuthorDTO> index() {
         return authorsService.findAll()
                 .stream()
@@ -52,7 +52,7 @@ public class AuthorsController {
         return bookModelMapper.allBooksToDTO(authorsService.findBooksOfAuthor(id));
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult) {
         authorDTOValidator.validate(authorDTO, bindingResult);
 

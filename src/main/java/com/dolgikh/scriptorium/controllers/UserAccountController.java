@@ -29,7 +29,7 @@ public class UserAccountController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping()
+    @GetMapping
     public UserAccountResponseDTO showCurrentUser() {
         return modelMapper.map(getCurrentUser(), UserAccountResponseDTO.class);
     }

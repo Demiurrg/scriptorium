@@ -30,7 +30,7 @@ public class BooksController {
         this.bookDTOValidator = bookDTOValidator;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<BookResponseDTO> index() {
         return booksService.findAll()
                 .stream()
@@ -43,7 +43,7 @@ public class BooksController {
         return bookModelMapper.bookToDTO(booksService.findOne(id));
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult) {
         bookDTOValidator.validate(bookRequestDTO, bindingResult);
 
