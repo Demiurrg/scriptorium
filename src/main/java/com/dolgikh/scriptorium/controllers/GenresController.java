@@ -63,7 +63,7 @@ public class GenresController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody @Valid GenreDTO genreDTO, BindingResult bindingResult, @PathVariable Integer id) {
         genreDTOValidator.validate(genreDTO, bindingResult);
 

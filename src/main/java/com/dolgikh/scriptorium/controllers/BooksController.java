@@ -55,7 +55,7 @@ public class BooksController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody @Valid BookRequestDTO bookRequestDTO, BindingResult bindingResult, @PathVariable Integer id) {
         bookDTOValidator.validate(bookRequestDTO, bindingResult);
 

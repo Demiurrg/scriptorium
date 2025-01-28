@@ -63,7 +63,7 @@ public class AuthorsController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody @Valid AuthorDTO authorDTO, BindingResult bindingResult, @PathVariable Integer id) {
         authorDTOValidator.validate(authorDTO, bindingResult);
 
