@@ -15,6 +15,11 @@ import java.util.List;
 public class BookReviewsService {
     private final BookReviewsRepository bookReviewsRepository;
 
+    public void checkReviewExistence(long id) {
+        if (bookReviewsRepository.existsById(id))
+            throw new ReviewNotFoundException(id);
+    }
+
     public List<BookReview> findReviewsForBook(long bookId) {
         return bookReviewsRepository.findByBookId(bookId);
     }
@@ -30,8 +35,7 @@ public class BookReviewsService {
 
     @Transactional
     public void update(BookReview bookReview, long id) {
-        if (bookReviewsRepository.findById(id).isEmpty())
-            throw new ReviewNotFoundException(id);
+        checkReviewExistence(id);
 
         bookReview.setId(id);
         bookReviewsRepository.save(bookReview);
@@ -39,8 +43,7 @@ public class BookReviewsService {
 
     @Transactional
     public void delete(long id) {
-        if (bookReviewsRepository.findById(id).isEmpty())
-            throw new ReviewNotFoundException(id);
+        checkReviewExistence(id);
 
         bookReviewsRepository.deleteById(id);
     }

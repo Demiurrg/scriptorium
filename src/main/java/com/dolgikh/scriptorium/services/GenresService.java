@@ -10,13 +10,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GenresService {
     private final GenresRepository genresRepository;
+
+    public void checkGenreExistence(long id) {
+        if(!genresRepository.existsById(id))
+            throw new GenreNotFoundException(id);
+    }
 
     public Page<Genre> findAll(Pageable pageable) {
         return genresRepository.findAll(pageable);
@@ -27,12 +30,7 @@ public class GenresService {
     }
 
     public Genre findOne(long id) {
-        Optional<Genre> genre = genresRepository.findById(id);
-
-        if (genre.isEmpty())
-            throw new GenreNotFoundException(id);
-
-        return genre.get();
+        return genresRepository.findById(id).orElseThrow(() -> new GenreNotFoundException(id));
     }
 
     @Transactional
@@ -42,8 +40,7 @@ public class GenresService {
 
     @Transactional
     public void update(Genre genre, long id) {
-        if (genresRepository.findById(id).isEmpty())
-            throw new GenreNotFoundException(id);
+        checkGenreExistence(id);
 
         genre.setId(id);
         genresRepository.save(genre);
@@ -51,8 +48,7 @@ public class GenresService {
 
     @Transactional
     public void delete(long id) {
-        if (genresRepository.findById(id).isEmpty())
-            throw new GenreNotFoundException(id);
+        checkGenreExistence(id);
 
         genresRepository.deleteById(id);
     }

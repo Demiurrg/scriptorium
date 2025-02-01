@@ -15,16 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class BooksService {
     private final BooksRepository booksRepository;
 
+    public void checkBookExistence(long id) {
+        if (!booksRepository.existsById(id))
+            throw new BookNotFoundException(id);
+    }
+
     public Page<Book> findAll(Pageable pageable) {
         return booksRepository.findAll(pageable);
     }
 
     public Book findOne(long id) {
         return booksRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-    }
-
-    public boolean doesBookExist(long id) {
-        return booksRepository.findById(id).isPresent();
     }
 
     @Transactional
@@ -34,8 +35,7 @@ public class BooksService {
 
     @Transactional
     public void update(Book book, long id) {
-        if (!doesBookExist(id))
-            throw new BookNotFoundException(id);
+        checkBookExistence(id);
 
         book.setId(id);
         booksRepository.save(book);
@@ -43,8 +43,7 @@ public class BooksService {
 
     @Transactional
     public void delete(long id) {
-        if (!doesBookExist(id))
-            throw new BookNotFoundException(id);
+        checkBookExistence(id);
 
         booksRepository.deleteById(id);
     }

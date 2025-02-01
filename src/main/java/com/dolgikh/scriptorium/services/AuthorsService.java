@@ -10,25 +10,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthorsService {
     private final AuthorsRepository authorsRepository;
 
+    public void checkAuthorExistence(long id) {
+        if (authorsRepository.existsById(id))
+            throw new AuthorNotFoundException(id);
+    }
+
     public Page<Author> findAll(Pageable pageable) {
         return authorsRepository.findAll(pageable);
     }
 
     public Author findOne(long id) {
-        Optional<Author> author = authorsRepository.findById(id);
-
-        if (author.isEmpty())
-            throw new AuthorNotFoundException(id);
-
-        return author.get();
+        return authorsRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
     }
 
     public Page<Book> findBooksByAuthor(long id, Pageable pageable) {
@@ -45,8 +43,7 @@ public class AuthorsService {
 
     @Transactional
     public void update(Author author, long id) {
-        if (authorsRepository.findById(id).isEmpty())
-            throw new AuthorNotFoundException(id);
+        checkAuthorExistence(id);
 
         author.setId(id);
         authorsRepository.save(author);
@@ -54,8 +51,7 @@ public class AuthorsService {
 
     @Transactional
     public void delete(long id) {
-        if (authorsRepository.findById(id).isEmpty())
-            throw new AuthorNotFoundException(id);
+        checkAuthorExistence(id);
 
         authorsRepository.deleteById(id);
     }
