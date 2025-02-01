@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.Date;
-
+import java.time.LocalDateTime;
 
 @Component
 public class AuthorDTOValidator implements Validator {
@@ -19,14 +18,15 @@ public class AuthorDTOValidator implements Validator {
     @Override
     public void validate(@NotNull Object target, @NotNull Errors errors) {
         AuthorDTO authorDTO = (AuthorDTO) target;
+        LocalDateTime now = LocalDateTime.now();
 
-        if (authorDTO.dateOfBirth().getTime() > new Date().getTime())
+        if (authorDTO.dateOfBirth().isAfter(now))
             errors.rejectValue("dateOfBirth", "", "Date of birth is in the future");
 
-        if (!authorDTO.isAlive() && authorDTO.dateOfDeath().getTime() > new Date().getTime())
+        if (!authorDTO.isAlive() && authorDTO.dateOfDeath().isAfter(now))
             errors.rejectValue("dateOfDeath", "", "Date of death is in the future");
 
-        if (!authorDTO.isAlive() && authorDTO.dateOfDeath().getTime() < authorDTO.dateOfBirth().getTime())
+        if (!authorDTO.isAlive() && authorDTO.dateOfDeath().isBefore(authorDTO.dateOfBirth()))
             errors.rejectValue("dateOfDeath", "", "Date of death is later than date of birth");
     }
 }

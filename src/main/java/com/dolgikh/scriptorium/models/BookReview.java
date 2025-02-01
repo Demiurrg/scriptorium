@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="book_review")
@@ -33,5 +33,5 @@ public class BookReview {
     private String text;
 
     @Column(name = "date", nullable = false)
-    private Date date;
+    private LocalDateTime date;
 }

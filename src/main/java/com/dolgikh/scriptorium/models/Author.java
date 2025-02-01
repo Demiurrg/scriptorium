@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,10 +23,10 @@ public class Author {
     private String name;
 
     @Column(name="date_of_birth", nullable = false)
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
 
     @Column(name="date_of_death")
-    private Date dateOfDeath;
+    private LocalDateTime dateOfDeath;
 
     @ManyToMany(mappedBy = "authors")
     private List<Book> books;

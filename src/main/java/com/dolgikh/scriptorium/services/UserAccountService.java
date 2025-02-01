@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -53,7 +51,7 @@ public class UserAccountService {
         if (userReadingHistoryRepository.findByUserIdAndBookId(userAccount.getId(), bookId).isPresent())
             throw new IllegalArgumentException("Book with id " + bookId + " has already been read");
 
-        userReadingHistoryRepository.save(new UserReadingHistory(userAccount, book, new Date()));
+        userReadingHistoryRepository.save(new UserReadingHistory(userAccount, book));
     }
 
     @Transactional

@@ -3,7 +3,7 @@ package com.dolgikh.scriptorium.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_reading_history")
@@ -29,5 +29,9 @@ public class UserReadingHistory {
 
     @NonNull
     @Column(name = "date", nullable = false)
-    private Date date;
+    private LocalDateTime date;
+
+    public UserReadingHistory(UserAccount user, Book book) {
+        this(user, book, LocalDateTime.now());
+    }
 }
